@@ -1,6 +1,8 @@
 TEST
     Deployment 3 contracts
+    
       RealDiplomaToken Deployment
+      
         ✔ should revert because not the owner
         ✔ should get _totalSupply
       DiplomaFile Deployment
@@ -127,4 +129,4 @@ File                   |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Li
 All files              |      100 |    94.44 |      100 |      100 |                |
 -----------------------|----------|----------|----------|----------|----------------|
 
-Les branches non testés sont associés aux deux fonctions transfer qui envoie des tokens aux utilisateurs. Le chemin non testé correspond au revert de ces deux fonctions, revert qu'il n'est possible d'obtenir que lorsque le contrat n'as plus suffisant de fonds, cas qui consisterait à un hack du contrat.   
+Les branches non testés sont associés aux deux fonctions transfer qui envoie des tokens aux utilisateurs. Le chemin non testé correspond au revert de ces deux fonctions, revert qu'il n'est possible d'obtenir que lorsque le contrat n'a plus suffisant de fonds, cas qui consisterait à un hack du contrat.   
