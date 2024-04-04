@@ -106,6 +106,7 @@ TEST
         ✔ should set the hasClaimed to true
         ✔ should transfer the token to voter2
         ✔ should emit : GetRewardEvent(msg.sender, amount);
+        
 
 
   86 passing (2m)
