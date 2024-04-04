@@ -78,10 +78,10 @@ contract DiplomaFile is DiplomaFactory, DepositFactory, VoteFactory, Ownable  {
     
 
     /// @notice The delay (in seconds) during a dispute can be initiated after a case is created.
-    uint public DisputeDelay = 600 seconds;
+    uint public DisputeDelay = 120 seconds;
 
     /// @notice The delay (in seconds) for voting after a dispute is initiated.
-    uint public votingDelay = 600 seconds;
+    uint public votingDelay = 120 seconds;
 
     /// @notice The price (in wei) required for create a case and dispute a case.
     uint public constant price = 100*(10**18);

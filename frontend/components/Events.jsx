@@ -28,6 +28,7 @@ const Events = () => {
           mb={5} 
           overflowY="auto"
           marginTop={"40px"}
+          maxH={"600px"}
         >
         {events.length > 0 ? (
           events.map((event, index) => (
@@ -79,11 +80,11 @@ function getArg(event) {
     case 'BecomeVoter':
       return "".concat(event.address).concat(" locked ").concat(getToken(event.amount)).concat(" RdaToken and is now a voter !")
     case 'CreateCase':
-        return "".concat(event.address).concat(" deposited the ").concat(event.index).concat("th of the protocol at ").concat(event.creationTime);
-    case 'ContestCase' : 
-      return "preuve apporté ";
-    case 'SimpleResolve':
-        return "one more"
+        return "".concat(event.address).concat(" deposited case n°").concat(event.index);
+    case 'DisputeCase' : 
+      return "".concat(event.address).concat(" dispute case n°").concat(event.index).concat(" with the proof n°").concat(event.proof);
+    case 'Resolve':
+        return "Case n° ".concat(event.index).concat(" has been ").concat(getStatusText(event.status));
     default:
       return ; // Default icon
   }
@@ -99,9 +100,9 @@ function getIcon(type) {
       return AddIcon;
     case 'CreateCase':
       return EditIcon;
-    case 'ContestCase':
-      return CheckCircleIcon;
-    case 'SimpleResolve':
+    case 'DisputeCase':
+      return BellIcon;
+    case 'Resolve':
         return CheckCircleIcon;
     default:
       return BellIcon; // Default icon
@@ -114,9 +115,9 @@ function getColor(type) {
       return 'red.500';
     case 'CreateCase':
       return 'green.500';
-    case 'ContestCase':
+    case 'DipusteCase':
       return 'purple.500';
-    case 'SimpleResolve':
+    case 'Resolve':
         return 'yellow.500';
     default:
       return 'gray.500'; // Default color
@@ -129,9 +130,9 @@ function getColorScheme(type) {
       return 'red';
     case 'CreateCase':
       return 'green';
-    case 'ContestCase':
+    case 'DisputeCase':
       return 'purple';
-    case 'SimpleResolve':
+    case 'Resolve':
         return 'yellow';
     default:
       return 'gray'; // Default color scheme
@@ -144,10 +145,22 @@ function getBadgeText(event) {
       return 'New voter registered';
     case 'CreateCase':
       return 'New diploma registered';
-    case 'ContestCase':
+    case 'DisputeCase':
       return 'New diploma disputed';
-    case 'SimpleResolve':
-        return 'New diploma validated';
+    case 'Resolve':
+        return 'New diploma settled';
+    default:
+      return 'Unknown Event';
+  }
+}
+
+function getStatusText(status) {
+  switch (status) {
+    case 1:
+      return 'validated';
+    case 3:
+      return 'rejected';
+    
     default:
       return 'Unknown Event';
   }

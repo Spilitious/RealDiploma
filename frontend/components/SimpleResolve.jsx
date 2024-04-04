@@ -14,7 +14,7 @@ import { getEventSelector } from 'viem';
 // import Events from './Events';
 
 
-const SimpleResolve = ({Id}) => {
+const SimpleResolve = ({Owner, Id}) => {
     
         const { contractAddress, contractAbi, getEvents, price, contestDelay, votingDelay } = useContext(RdaContext);
         const toast = useToast();
@@ -72,22 +72,25 @@ const SimpleResolve = ({Id}) => {
                     <AlertIcon />
                     Diploma validated successfully.
                 </Alert>}
-            <Flex 
+            
+            {address == Owner ? (
+                <Flex 
                 justifyContent="space-between"
                 alignItems="center"
                 width="70%"
                 mt="1rem"
                 direction="column"
             >
+            <Text> Aucune contestation n'a été faite, vous pouvez valider votre diplôme et récupérer votre collatéral </Text>
+            <Button colorScheme='teal'  size='md' m={4}  onClick={simpleResolve}> Valider </Button>
+            </Flex>) : (
+            <Box >
+            <Text>Aucune contestation n'a été faite, ce diplôme peut être validé par son propriétaire</Text>
+            </Box>
                
-                <Box >
-                <Text>Aucune contestation n'a été faite, ce diplôme peut être validé par son propriétaire</Text>
-                <Button colorScheme='teal'  size='md' m={4}  
-                        onClick={simpleResolve}> Valider </Button>
-                </Box>
-                </Flex>
-                </>)
-      
+            )}
+        </>
+        )
       
     }
 

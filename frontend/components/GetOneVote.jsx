@@ -5,11 +5,12 @@ import {
   Td,
   Spinner,
   Alert,
-  AlertIcon, Box,
+  AlertIcon, Box, Text, useToast,
   useColorModeValue, Button } from '@chakra-ui/react';
-import { useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { useReadContract, useWriteContract, useWaitForTransactionReceipt,  useAccount } from 'wagmi';
 import { RdaContext } from '@/utils';
 import Countdown from './Countdown';
+import GetOneDispute from './GetOneDispute'
 
 const GetOneVote = ({ Ind }) => {
   //UseContext  
@@ -28,7 +29,16 @@ const GetOneVote = ({ Ind }) => {
   
   const hoverBgColor = useColorModeValue("green.100", "teal.800");
   const selectedBgColor = useColorModeValue("green.100", "green.700");
+  const toast = useToast();
+  const address = useAccount();
   
+  //Hook de récupération 
+  const { data: hasVoted, error: hasVotedError, isPending: hasVotedPending } = useReadContract({
+    address: contractAddress,
+    abi: contractAbi,
+    functionName: 'getHasVoted',
+    args: [Ind, address]
+  });
 
   //Hook de récupération du vote
   const { data: newVote, error: voteError, isPending: voteIsPending } = useReadContract({
@@ -130,30 +140,27 @@ const { isSuccess: isConfirmed } =
 
   return (
     <>
-    <Countdown titre={"Temps à avant la fin du vote"} duration={getDuration(creationTime, votingDelay)}/> 
-    <Tr //key={Id} 
-       
-       // _hover={{ bg : hoverBgColor  }}
-        height="20px"
-        overflowY="auto"
-        >
-       
-        <Td style={{ textAlign: 'center' }} >Vote Pour </Td><Td style={{ textAlign: 'center' }} isNumeric>{yes}</Td>
-        <Td style={{ textAlign: 'center' }} >Vote Contre </Td><Td style={{ textAlign: 'center' }} isNumeric>{no}</Td>
-        <Td style={{ textAlign: 'center' }} >Poids des tokens engagnés dans le vote </Td><Td style={{ textAlign: 'center' }} isNumeric>{totalTokenSquare}</Td></Tr>
-        <Tr 
-        height="20px"
-        overflowY="auto">
+    {getIsVoteOver(creationTime, votingDelay) ? (
+    <Text> Le vote est terminé </Text>) : (
+    <Box>
+   
+    
+    <Countdown titre={"Temps à avant la fin du vote"} duration={getDuration(creationTime, votingDelay)}/>
+    <Tr><GetOneDispute Ind= {Ind}/></Tr>
+    <Tr height="20px" overflowY="auto">
         {getAllowedToVote(voterTimeRegistration, creationTime, isVoter) == 0 ?  (<Box>Vous ne pouvez pas voter. Devenez électeur en bloquant vos tokens RDA pour participer à ce vote</Box>) : null}
         {getAllowedToVote(voterTimeRegistration, creationTime, isVoter) == 1 ?  (<Box>Vous vous êtes enregistré trop tard pour participer à ce vote</Box>) : null}
         {getAllowedToVote(voterTimeRegistration, creationTime, isVoter) == 2 ? (<Box>
           <Td rowspan={2}><Button size="sm" colorScheme='teal' onClick={voteY}> Vote Yes </Button></Td>
           <Td rowspan={2}><Button size="sm" colorScheme='teal' onClick={voteN}> Vote No </Button></Td>
-          </Box> ) :null          
-        }
+          </Box> ) :null}
+    </Tr></Box>)}
 
-       
-    </Tr>
+    <Tr height="20px" overflowY="auto">
+    <Td style={{ textAlign: 'center' }} >Vote Pour </Td><Td style={{ textAlign: 'center' }} isNumeric>{yes}</Td>
+    <Td style={{ textAlign: 'center' }} >Vote Contre </Td><Td style={{ textAlign: 'center' }} isNumeric>{no}</Td>
+    <Td style={{ textAlign: 'center' }} >Poids des tokens engagés </Td><Td style={{ textAlign: 'center' }} isNumeric>{totalTokenSquare}</Td></Tr>
+    
     </>
   );
 }
@@ -165,16 +172,15 @@ export default GetOneVote;
 function getDuration(creationTime, contestDelay)
 {
   const timestamp = Date.now()/1000;
-  console.log("creation", creationTime)
-  console.log("delay", Number(contestDelay))
-  console.log("heure", timestamp);
+  // console.log("creation", creationTime)
+  // console.log("delay", Number(contestDelay))
+  // console.log("heure", timestamp);
   return (creationTime+ Number(contestDelay) - timestamp);
 }
 
 function getAllowedToVote(timeRegistration, voteCreationTime, isVoter)
 {
-  console.log(timeRegistration)
-  console.log(voteCreationTime)
+  
   if(!isVoter)
     return 0;   //pas voter
   if(timeRegistration > voteCreationTime)
@@ -184,3 +190,14 @@ function getAllowedToVote(timeRegistration, voteCreationTime, isVoter)
   return 2; //Autorisé à voter
 
 }
+
+function getIsVoteOver(voteCreationTime, votingDelay)
+{
+  const timestamp = Date.now()/1000;
+  if(voteCreationTime+ Number(votingDelay) > timestamp)
+      return false;
+  
+  return true;
+
+}
+

@@ -27,7 +27,7 @@ const RealDiploma = () => {
                 content1 = <DiplomasTable/> 
                 break;
             case 3:
-                content1 = <Events/> 
+                content1 = <Events overflowY='auto'/> 
                     break;
             default:
                 content1 = <Box> I think you're lost ! </Box>;

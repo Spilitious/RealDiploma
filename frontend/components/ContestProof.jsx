@@ -74,7 +74,7 @@ const ContestProof = ({Id}) => {
             address: contractAddress, 
             abi: contractAbi,
             functionName: 'disputeCase', 
-            args: [Id, 0]
+            args: [Id, selectedProof]
         })
     };
     

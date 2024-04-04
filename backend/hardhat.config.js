@@ -1,8 +1,28 @@
 require("@nomicfoundation/hardhat-toolbox");
-require('solidity-docgen');
+require("@nomicfoundation/hardhat-verify");
+require("dotenv").config();
+
+const PK = process.env.PRIVATE_KEY || "";
+const RPC_URL=process.env.INFURA_URL || "";
+const ETHERSCAN = process.env.ETHERSCAN_API_KEY || "";
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
+  networks:{
+    localhost:{
+      url: "http://127.0.0.1:8545",
+      chainId: 31337,
+    },
+    sepolia : {
+      url: RPC_URL ,
+      chainId: 11155111,
+      accounts: [`0x${PK}`]
+    }
+  },
   solidity: "0.8.24",
-  docgen: {}
+  etherscan:{
+    apiKey:{
+      sepolia:ETHERSCAN
+    }
+  }
 };

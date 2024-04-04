@@ -6,7 +6,7 @@ import {
   Table,
   Spinner,
   Alert,
-  AlertIcon,
+  AlertIcon, Head,
   Box,
   Button,
   useColorModeValue } from '@chakra-ui/react';
@@ -18,8 +18,10 @@ import GetOneVote from './GetOneVote';
 import Mint from './Mint';
 import Countdown from './Countdown' 
 import SimpleResolve from './SimpleResolve'
+import Resolve from './Resolve'
 import { confluxESpaceTestnet, mintSepoliaTestnet } from 'viem/chains';
 import BecomeVoter from './BecomeVoter';
+
 import { resolve } from 'styled-jsx/css';
 
 const GetOneDiploma = ({ Id }) => {
@@ -104,9 +106,10 @@ const GetOneDiploma = ({ Id }) => {
   }
 
   return (
-    <Box  _hover={{ bg : hoverBgColor  }}>
-
-
+    <Box   > 
+      {/* _hover={{ bg : hoverBgColor  }} */}
+       
+        <Tr textAlign="center" fontSize="xl" color="teal.500" fontWeight="bold" borderColor="teal.500" borderWidth="2px"> Diplôme n° {Number(Id)+1} </Tr>
         <Tr width='1000px'><GetOneDip  key={Id} Ind={Id} /></Tr>
         <Tr width='100%'>
         <Td width='33%' borderColor="teal.500" borderWidth="2px">{owner}</Td>
@@ -122,10 +125,10 @@ const GetOneDiploma = ({ Id }) => {
         </Box>
         <Box>
             {getAction(status, creationTime, contestDelay, votingDelay) == 1 ? <ContestProof Id={Id} /> : null}
-            {getAction(status, creationTime, contestDelay, votingDelay) == 0 ? <SimpleResolve Id={Id}/> :  null}
+            {getAction(status, creationTime, contestDelay, votingDelay) == 0 ? <SimpleResolve Owner={owner} Id={Id}/> :  null}
             {getAction(status, creationTime, contestDelay, votingDelay) == 3 ? <GetOneVote Ind={Id} /> : null}
-            {getAction(status, creationTime, contestDelay, votingDelay) == 2 ? <Mint Id={Id} /> : null }
-            {getAction(status, creationTime, contestDelay, votingDelay) == 4 ? "Resolve2" : null}
+            {getAction(status, creationTime, contestDelay, votingDelay) == 2 ? <Mint Owner={owner} Id={Id} /> : null }
+            {getAction(status, creationTime, contestDelay, votingDelay) == 4 ? <Box><GetOneVote Ind={Id} /><Resolve Id={Id}/></Box> : null}
            
 
         </Box>
@@ -166,9 +169,9 @@ function getDate(timestamp) {
   const getAction = (status, creationTime, contestDelay, votingDelay) => {
     const timestamp = Date.now()/1000;
 
-    console.log(creationTime);
-    console.log(contestDelay);
-    console.log(timestamp);
+    // console.log(creationTime);
+    // console.log(contestDelay);
+    // console.log(timestamp);
     if(status ==0) {
       
       if((creationTime + Number(contestDelay)) < timestamp)
@@ -220,9 +223,9 @@ function getActionText(status, creationTime, votingDelay, contestDelay) {
   function getDuration(creationTime, contestDelay)
   {
     const timestamp = Date.now()/1000;
-    console.log("creation", creationTime)
-    console.log("delay", Number(contestDelay))
-    console.log("heure", timestamp);
+    // console.log("creation", creationTime)
+    // console.log("delay", Number(contestDelay))
+    // console.log("heure", timestamp);
     return (creationTime+ Number(contestDelay) - timestamp);
   }
 

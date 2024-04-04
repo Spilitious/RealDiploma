@@ -30,8 +30,15 @@ async function resolveAfterVote() {
 
     /* ********************************************************** Execution *********************************************************** */
     
-    await diplomaFile.setVotingDelay(0);
+    // await diplomaFile.setVotingDelay(0);
     let balanceBefore = await rda.balanceOf(diplomaFile.target);
+    [creationTime, yes, no, tokenAmountSquare] = await diplomaFile.getVote(4);
+    const votingDelay = await diplomaFile.votingDelay();
+    console.log("Création :", creationTime);
+    const timestamp = new Date() / 1000;
+    console.log("heure : ", timestamp);
+    console.log("votingDelay : ", votingDelay )
+
     console.log("BALANCE AVANT")
     console.log("Contract : ", balanceBefore);
     balanceBefore = await rda.balanceOf(user1);
@@ -40,7 +47,7 @@ async function resolveAfterVote() {
     console.log("user2   : ", balanceBefore);
     
 
-    await diplomaFile.resolveAfterVote(1);
+    await diplomaFile.resolveAfterVote(4);
     balanceBefore = await rda.balanceOf(diplomaFile.target);
     console.log("BALANCE AVANT")
     console.log("Contract : ", balanceBefore);

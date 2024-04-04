@@ -92,7 +92,7 @@ const ApproveButton = ({amount}) => {
                     <AlertIcon />
                     You have successfully approved {approval} tokens",
                 </Alert>}
-            <Button  isDisabled={isEnable(amount)} colorScheme='teal'  size='md' m={4}  onClick={approve}> Approve </Button>
+            <Button  isDisabled={isEnable(amount)} colorScheme='teal'  size='md' m={4}  onClick={approve}> Autoriser la dépense de token </Button>
             
             </>)
     }

@@ -91,7 +91,7 @@ export const RdaProvider = ({ children }) => {
         }
     }, [contestDelayRda, contestDelayError])
 
-    console.log("contest", contestDelay)
+   
 
     /* ******************************************************************* Récupération du contestDelay ****************************************************** */
     const { data: votingDelayRda, error: votingDelayError, isPending : votingDelayIsPending } = useReadContract({
@@ -171,7 +171,7 @@ export const RdaProvider = ({ children }) => {
 
         const contestCaseEvents = await publicClient.getLogs({
             address: contractAddress,
-            event: parseAbiItem('event CreateNewContestEvent(address owner, uint index, uint8 proof)'),
+            event: parseAbiItem('event CreateNewDisputeEvent(address owner, uint index, uint8 proof)'),
             // du premier bloc
             fromBlock: 0n,
             // jusqu'au dernier
@@ -189,7 +189,18 @@ export const RdaProvider = ({ children }) => {
             toBlock: 'latest' // Pas besoin valeur par défaut
           })
 
+        const newResolveEvents = await publicClient.getLogs({
+            address: contractAddress,
+            event: parseAbiItem('event ResolveAfterVoteEvent(uint indexFile, uint8 status)'),
+            // du premier bloc
+            fromBlock: 0n,
+            // jusqu'au dernier
+            toBlock: 'latest' // Pas besoin valeur par défaut
+          })
+
         
+
+        /*
         const createNewDiplomaEvents = await publicClient.getLogs({
             address: contractAddress,
             event: parseAbiItem('event CreateNewDiplomaEvent(uint index, string lastName, string firstName, uint birthday, string school, string diplomaName, uint diplomaDate)'),
@@ -198,7 +209,7 @@ export const RdaProvider = ({ children }) => {
             // jusqu'au dernier
             toBlock: 'latest' // Pas besoin valeur par défaut
          }) 
-
+*/
         // console.log('CreateNewDiploma Events:', createNewDiplomaEvents);
 
         const combinedEvents = createFileEvents.map((event) => ({
@@ -206,13 +217,16 @@ export const RdaProvider = ({ children }) => {
           address: event.args.owner,
           index : event.args.index,
           creationTime : event.args.creationTime,
-          lockNumber: Number(event.blockNumber)
+          blockNumber: Number(event.blockNumber)
         })).concat(simpleResolveEvents.map((event) => ({
-          type: 'SimpleResolve',
-          address: event.args.account,
+          type: 'Resolve',
+          index: event.args.index,
+          status: event.args.status,
           blockNumber: Number(event.blockNumber)
         }))).concat(contestCaseEvents.map((event) => ({
-            type: 'ContestCase',
+            type: 'DisputeCase',
+            address: event.args.owner,
+            proof: Number(event.args.proof),
             index: Number(event.args.index),
             blockNumber: Number(event.blockNumber)
           }))).concat(becomeVoterEvents.map((event) => ({
@@ -220,10 +234,11 @@ export const RdaProvider = ({ children }) => {
             address: event.args.voter,
             amount: Number(event.args.amount),
             blockNumber: Number(event.blockNumber)
-          }))).concat(createNewDiplomaEvents.map((event) => ({
-            type: 'CreateDiploma',
-            index: Number(event.args.index),
-            //amount: Number(event.args.amount),
+          }))).concat(newResolveEvents.map((event) => ({
+            type: 'Resolve',
+            index: event.args.indexFile,
+            status: event.args.status,
+            amount: Number(event.args.amount),
             blockNumber: Number(event.blockNumber)
           })))
            
@@ -246,7 +261,7 @@ export const RdaProvider = ({ children }) => {
           }
         }
         getAllEvents();
-        console.log()
+       
       }, [address])
 
     /* ******************************************************************** Exportation des variables ********************************************************* */

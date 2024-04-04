@@ -22,27 +22,8 @@ const DiplomasTable = (refreshTable = false) => {
     //Gestion du clique sur un diplome
     const handleRowClick = (rowNumber) => {
         setSelectedCase(rowNumber);
-        openProposal();
     }
 
-    const openProposal = () => {
-        // setIsOpen(!isOpen);
-        console.log(isOpen);
-        if(isOpen)
-        {
-         setIsOpen(false);
-              
-        }
-        else
-        {
-            setIsOpen(true);
-           
-            
-        }  
-
-      
-      };
-    
       
 
     useEffect(() => {
@@ -52,33 +33,20 @@ const DiplomasTable = (refreshTable = false) => {
     useEffect(() => {
         // Filtrer les événements pour ne garder que les événements de type 'CreateNewCaseEvent'
         const diplomaAddedEvents = events.filter(event => event.type === 'CreateCase');
-        diplomaAddedEvents.reverse();
+        // diplomaAddedEvents.reverse();
         
         const dipAddedEvents = events.filter(event => event.type === 'CreateDiploma');
         dipAddedEvents.reverse();
         
         setDiplomas(diplomaAddedEvents.map((event) => ( 
         <Box  key={event.index}
-            _hover={{ bg : hoverBgColor  }}
+             //_hover={{ bg : hoverBgColor  }}
               onClick={() => handleRowClick(event.index)}
-              // height="20px"
               overflowY="auto"
-              width="1000px">
-            {/* <GetOneDip key={event.index} Ind={event.index}/> */}
-            <GetOneDiploma key={event.index} Id={event.index} />
-            
-            <Box>
-            {/* {true ? <ContestProof Id={event.index} /> : null} */}
-            </Box>
-            <Box>
-            {/* {true ? <GetOneVote Ind={event.index} /> : null} */}
-            </Box>
-            
-            
+              width="1000px"
+              borderColor="teal.500" borderWidth="2px">
+             <GetOneDiploma key={event.index} Id={event.index} />
             </Box>)))
-
-        
-       // setDips(dipAddedEvents.map((event) => (<GetOneDip key={event.index} Id={event.index} />))) 
          
     }, [events]);
 
@@ -92,18 +60,7 @@ const DiplomasTable = (refreshTable = false) => {
             bg={tableBgColor}>
                 
             <Table>
-                {/* <Thead > */}
-                    {/* <Tr > */}
-                        {/* <Th textColor={headTextColor}>Owner </Th> */}
-                        {/* <Th textColor={headTextColor} style={{ textAlign: 'center' }} isNumeric>CreationTime</Th>  */}
-                        {/* <Th textColor={headTextColor} style={{ textAlign: 'center' }} isNumeric>Status</Th>  */}
-                       {/*  */}
-                    {/* </Tr> */}
-                {/* </Thead> */}
-                {/* <Tbody>  */}
                     {diplomas} 
-                    {/* {dips} */}
-                {/* </Tbody> */}
             </Table>
         </TableContainer>
 

@@ -1,25 +1,15 @@
-import { Flex, Button, useToast, Table, Tbody, Thead, Tr, Input, Alert, AlertIcon, Box, Text } from '@chakra-ui/react';
+import { Flex, Button, useToast, Table, Tbody, Thead, Tr, Input, Text, Alert, AlertIcon, Box } from '@chakra-ui/react';
 import { useContext, useState, useEffect } from 'react';
 import { RdaContext } from '@/utils';
-import { ethers } from 'ethers';
-
-import { RdaNftAddress, RdaNftAbi  } from '@/constants/RdaNft'
-import  Browser from './Browser'
-
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useAccount } from 'wagmi'
-import { getEventSelector } from 'viem';
-// import WorkflowManager from './WorkflowManager';
-// import ActionContainer from './ActionContainer';
-// import Events from './Events';
 
 
-const Mint = ({Owner, Id}) => {
+const Resolve = ({Id}) => {
     
         const { contractAddress, contractAbi, getEvents } = useContext(RdaContext);
-        const { address } = useAccount();
         const toast = useToast();
-        
-       
+        const { address } = useAccount();
+    
         const { data: hash, writeContract } = useWriteContract({
             mutation: {
                 onError: (error) => {
@@ -35,12 +25,13 @@ const Mint = ({Owner, Id}) => {
         });
     
 
-        const mint = async () => {
+        const resolve = async () => {
+            console.log("Id", Id)
             writeContract({ 
-                address: RdaNftAddress, 
-                abi: RdaNftAbi,
-                functionName: 'mintDiploma', 
-                args: [Id]
+                address: contractAddress, 
+                abi: contractAbi,
+                functionName: 'resolveAfterVote', 
+                args: [Number(Id)]
             })
         };
     
@@ -53,36 +44,41 @@ const Mint = ({Owner, Id}) => {
             if(isConfirmed) {
                 getEvents();
                 toast({
-                    title: "NFT minted successfully",
+                    title: "Diploma validated successfully",
                     status: "success",
                     duration: 3000,
                     isClosable: true,
                 });
             }
+
         }, [isConfirmed])
       
       
         return (
             <>
+            
             {isConfirmed    
             &&  <Alert mt="1rem" status='success'>
                     <AlertIcon />
-                    NFT minted successfully.
+                    Diploma validated successfully.
                 </Alert>}
-            
-            {address == Owner ? (
-                <Flex 
+            <Flex 
                 justifyContent="space-between"
                 alignItems="center"
                 width="70%"
                 mt="1rem"
                 direction="column"
             >
-            <Text> Votre diplôme a été validé, vous pouvez minter votre NFT </Text>
-            <Button colorScheme='teal'  size='md' m={4}  onClick={mint}> Mint your NFT ! </Button>
-            </Flex>) : ( null)}
-            </>)
+               
+                <Box >
+                <Text>Le vote est terminé, le gagnant peut clotûrer le dossier</Text>
+                <Button colorScheme='teal'  size='md' m={4}  
+                        onClick={resolve}> Clôturer le dossier </Button>
+                </Box>
+                </Flex>
+                </>)
+      
       
     }
 
-export default Mint;
+export default Resolve;

@@ -154,7 +154,7 @@ const CreateCase = () => {
                 {/* <Button colorScheme='teal' size='xs' m={4}  onClick={approve}>Submit </Button> */}
                 </Tbody>
                 </Table>
-                {console.log("price2", price)}
+              
                 <Box fontSize="sm" color="gray.500" align="left">*Le prix du dépôt d'un dîplome est fixé à {Number(price)/10**18} tokens </Box>
                 {needApproval ? (
                     <Box>
