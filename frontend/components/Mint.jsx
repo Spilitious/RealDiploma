@@ -8,6 +8,7 @@ import  Browser from './Browser'
 
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useAccount } from 'wagmi'
 import { getEventSelector } from 'viem';
+import { RSC_PREFETCH_SUFFIX } from 'next/dist/lib/constants';
 // import WorkflowManager from './WorkflowManager';
 // import ActionContainer from './ActionContainer';
 // import Events from './Events';
@@ -18,7 +19,24 @@ const Mint = ({Owner, Id}) => {
         const { contractAddress, contractAbi, getEvents } = useContext(RdaContext);
         const { address } = useAccount();
         const toast = useToast();
+        const [alreadyMinted, setAlreayMinted] = useState();
+
+        const { data: ownerNft, error: ownerNftError, isPending: OwnerNftIsPending, refetch } = useReadContract({
+            address: RdaNftAddress, 
+            abi: RdaNftAbi,
+            functionName: 'ownerOf',
+            args: [Number(Id)+1]
+          });
         
+        
+          useEffect(() => {
+            if (ownerNftError) {
+              //setError(ownerNft.message);
+              setAlreayMinted(false)
+            } else if (ownerNft) {
+                setAlreayMinted(true)
+            }
+          }, [ownerNft, ownerNftError]);
        
         const { data: hash, writeContract } = useWriteContract({
             mutation: {
@@ -52,6 +70,7 @@ const Mint = ({Owner, Id}) => {
         useEffect(() => {
             if(isConfirmed) {
                 getEvents();
+                refetch();
                 toast({
                     title: "NFT minted successfully",
                     status: "success",
@@ -70,17 +89,18 @@ const Mint = ({Owner, Id}) => {
                     NFT minted successfully.
                 </Alert>}
             
+                     
             {address == Owner ? (
-                <Flex 
-                justifyContent="space-between"
-                alignItems="center"
-                width="70%"
-                mt="1rem"
-                direction="column"
-            >
-            <Text> Votre diplôme a été validé, vous pouvez minter votre NFT </Text>
-            <Button colorScheme='teal'  size='md' m={4}  onClick={mint}> Mint your NFT ! </Button>
-            </Flex>) : ( null)}
+            <>
+                {alreadyMinted ? (
+                    <Text> Félicitations ! Votre NFT a été minté </Text>) 
+                    :( <>
+                    <Text> Votre diplôme a été validé, vous pouvez minter votre NFT </Text>
+                    <Button colorScheme='teal'  size='md' m={4}  onClick={mint}> Mint your NFT ! </Button>
+                    </>
+                    )}
+            </>): null}
+
             </>)
       
     }

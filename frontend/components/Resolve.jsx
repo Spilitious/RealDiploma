@@ -1,12 +1,12 @@
-import { Flex, Button, useToast, Table, Tbody, Thead, Tr, Input, Text, Alert, AlertIcon, Box } from '@chakra-ui/react';
+import { Flex, Button, useToast, Table, Tbody, Thead, Tr, Input, Text, Alert, AlertIcon, Td, Box } from '@chakra-ui/react';
 import { useContext, useState, useEffect } from 'react';
 import { RdaContext } from '@/utils';
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useAccount } from 'wagmi'
 
 
-const Resolve = ({Id}) => {
+const Resolve = ({Owner, Id}) => {
     
-        const { contractAddress, contractAbi, getEvents } = useContext(RdaContext);
+        const { contractAddress, contractAbi, getEvents, refetchAll } = useContext(RdaContext);
         const toast = useToast();
         const { address } = useAccount();
     
@@ -43,6 +43,7 @@ const Resolve = ({Id}) => {
         useEffect(() => {
             if(isConfirmed) {
                 getEvents();
+                refetchAll()
                 toast({
                     title: "Diploma validated successfully",
                     status: "success",
@@ -62,21 +63,15 @@ const Resolve = ({Id}) => {
                     <AlertIcon />
                     Diploma validated successfully.
                 </Alert>}
-            <Flex 
-                justifyContent="space-between"
-                alignItems="center"
-                width="70%"
-                mt="1rem"
-                direction="column"
-            >
-               
-                <Box >
-                <Text>Le vote est terminé, le gagnant peut clotûrer le dossier</Text>
-                <Button colorScheme='teal'  size='md' m={4}  
+                {Owner == address ? (
+                <>
+               <Tr><Td> <Text>Le vote est en votre faveur </Text></Td>
+                <Td><Button colorScheme='teal'  size='md' m={4}  
                         onClick={resolve}> Clôturer le dossier </Button>
-                </Box>
-                </Flex>
-                </>)
+                
+                </Td></Tr></>) :(null)}
+                </>
+                )
       
       
     }

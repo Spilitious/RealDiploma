@@ -12,8 +12,9 @@ import { useWriteContract, useWaitForTransactionReceipt, useAccount } from 'wagm
 
 const Browser = () => {
     
-    const { setPage } = useContext(RdaContext);
-    const hoverBgColor = useColorModeValue("green.100", "teal.800");
+    const { page, setPage } = useContext(RdaContext);
+    const hoverBgColor = useColorModeValue("green.300", "teal.300");
+    const selectedBgColor =  useColorModeValue("green.100", "teal.100");
 
     const handleClick = (id) => {
         // alert('vous avez cliqué sur '.concat(id))
@@ -34,24 +35,26 @@ const Browser = () => {
                         
 
                         <Th _hover={{ bg : hoverBgColor  }} 
-                             style={{ textAlign: 'center' }}
+                             style={{textAlign : 'center' }}
+                           //  backgroundColor= {{selectedBgColor}}
                              onClick={() => handleClick(0)}>
+                             
                         Déposer votre diplôme </Th>
 
                         <Th _hover={{ bg : hoverBgColor  }} 
                             style={{ textAlign: 'center' }}
                              onClick={() => handleClick(1)}>
-                         Devenir un voteur </Th>
+                        Devenir un juré </Th>
 
-                         <Th _hover={{ bg : hoverBgColor  }}
+                        <Th _hover={{ bg : hoverBgColor  }}
                              style={{ textAlign: 'center' }}
                              onClick={() => handleClick(2)}>
-                         Afficher les diplômes</Th>
+                        Afficher les diplômes</Th>
 
                          <Th _hover={{ bg : hoverBgColor  }}
                              style={{ textAlign: 'center' }}
                              onClick={() => handleClick(3)}>
-                         Historique</Th>
+                        Historique</Th>
                         
                     </Tr>
                         </Tbody>

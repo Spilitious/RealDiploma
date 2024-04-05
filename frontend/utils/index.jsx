@@ -2,6 +2,7 @@
 import { createContext, useState, useEffect } from 'react'
 import { contractAddress, contractAbi } from '@/constants'
 import { useReadContract, useAccount } from 'wagmi'
+import { RdaAddress, RdaAbi  } from '@/constants'
 
 //import { useColorMode } from '@chakra-ui/color-mode';
 
@@ -24,10 +25,24 @@ export const RdaProvider = ({ children }) => {
 
     const [isVoter, setIsVoter] = useState();
     const [voterTimeRegistration, setVoterTimeRegistration] = useState();
-    
+    const [voterTokenAmount, setVoterTokenAmount] = useState();
+    const [userBalance, setUserBalance] = useState();
+    const [userAllowance, setUserAllowance] = useState();
+    const [refresh, setRefresh] = useState();
+
+    const refetchAll = () => {
+      refetch1();
+      refetch2();
+      refetch3();
+      refetch4();
+      refetch5();
+      refetch6();
+      refetch7();
+      setRefresh(!refresh)
+    }
    
     /* ******************************************************************* Récupération du prix ****************************************************** */
-    const { data: priceRda, error: priceError, isPending :priceIsPending } = useReadContract({
+    const { data: priceRda, error: priceError, isPending :priceIsPending, refetch :refetch1 } = useReadContract({
         // adresse du contrat
         address: contractAddress,
         // abi du contrat
@@ -49,7 +64,7 @@ export const RdaProvider = ({ children }) => {
 
    
     /* ******************************************************************* Récupération des fees ****************************************************** */
-    const { data: feeRda, error: feeError, isPending :feeIsPending } = useReadContract({
+    const { data: feeRda, error: feeError, isPending :feeIsPending, refetch :refetch2} = useReadContract({
         // adresse du contrat
         address: contractAddress,
         // abi du contrat
@@ -70,7 +85,7 @@ export const RdaProvider = ({ children }) => {
     }, [feeRda, feeError])
 
     /* ******************************************************************* Récupération du contestDelay ****************************************************** */
-    const { data: contestDelayRda, error: contestDelayError, isPending : contestDelayIsPending } = useReadContract({
+    const { data: contestDelayRda, error: contestDelayError, isPending : contestDelayIsPending, refetch :refetch3 } = useReadContract({
         // adresse du contrat
         address: contractAddress,
         // abi du contrat
@@ -94,7 +109,7 @@ export const RdaProvider = ({ children }) => {
    
 
     /* ******************************************************************* Récupération du contestDelay ****************************************************** */
-    const { data: votingDelayRda, error: votingDelayError, isPending : votingDelayIsPending } = useReadContract({
+    const { data: votingDelayRda, error: votingDelayError, isPending : votingDelayIsPending, refetch :refetch4 } = useReadContract({
         // adresse du contrat
         address: contractAddress,
         // abi du contrat
@@ -114,7 +129,7 @@ export const RdaProvider = ({ children }) => {
         }
     }, [votingDelayRda, votingDelayError])
 
-    const { data: voter, error: voterError, isPending : voterIsPending } = useReadContract({
+    const { data: voter, error: voterError, isPending : voterIsPending, refetch :refetch5} = useReadContract({
       // adresse du contrat
       address: contractAddress,
       // abi du contrat
@@ -125,7 +140,7 @@ export const RdaProvider = ({ children }) => {
       args : [address],
       account: address,
      
-  })
+    })
 
   useEffect(() => {
       if(voterError)
@@ -137,12 +152,48 @@ export const RdaProvider = ({ children }) => {
           {
             setIsVoter(true);
             setVoterTimeRegistration(voter.registrationTime);
+            setVoterTokenAmount(voter.tokenAmount)
           }
       }
   }, [voter, voterError])
 
- 
+  /* *************************************************************************** Récupération de la balance de l'utilisateur ************************************** */
 
+  const { data: userB, error: userError, isPending : userIsPending, refetch :refetch6} = useReadContract({
+    // adresse du contrat
+    address: RdaAddress,
+    // abi du contrat
+    abi: RdaAbi,
+    // nom de la fonction dans le smart contract
+    functionName: 'balanceOf',
+    // qui appelle la fonction ?
+    args : [address],
+    account: address,
+  })
+
+    useEffect(() => {
+      if(userError)
+        console.log(userError);
+      if(!userIsPending && !userError) 
+        setUserBalance(userB);
+    }, [userB, userError])
+
+   /* *************************************************************************** Récupération de l'allowance de l'utilisateur ************************************** */
+
+    const { data: userA, error: userAError, isPending : userAIsPending, refetch :refetch7} = useReadContract({
+        address: RdaAddress, 
+        abi: RdaAbi,
+        functionName: 'allowance',
+        account: address,
+        args : [address, contractAddress]
+    })
+  
+      useEffect(() => {
+        if(userAError)
+          console.log(userAError);
+        if(!userAIsPending && !userAError) 
+          setUserAllowance(userA);
+      }, [userA, userAError])
 
     /* ******************************************************************** Gestion des évènements ********************************************************* */
 
@@ -280,7 +331,13 @@ export const RdaProvider = ({ children }) => {
         selectedCase,
         setSelectedCase,
         isVoter,
-        voterTimeRegistration
+        voterTimeRegistration,
+        voterTokenAmount,
+        userBalance,
+        userAllowance,
+        setUserAllowance,
+        refetchAll,
+        refresh,
        
     
     };

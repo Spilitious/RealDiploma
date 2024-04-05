@@ -9,7 +9,7 @@ async function main() {
   //Deploiemnent de RealDiplomaToken 
   const rda = await hre.ethers.deployContract("RealDiplomaToken");
   await rda.waitForDeployment();
-  console.log(`RDA contract has been deployer at ${rda.target}`);
+  console.log(`RDA contract has been deployed at ${rda.target}`);
   const [rdaOwner] = await hre.ethers.getSigners();
   console.log(`Owner address: ${rdaOwner.address}`);
 
@@ -18,14 +18,14 @@ async function main() {
   const DiplomaFile = await hre.ethers.getContractFactory("DiplomaFile");
   const diplomaFile = await DiplomaFile.deploy(rda.target, dao);
   await diplomaFile.waitForDeployment();
-  console.log(`DiplomaFile contract has been deployer at ${diplomaFile.target}`);
+  console.log(`DiplomaFile contract has been deployed at ${diplomaFile.target}`);
   console.log(`Dao address : ${dao.address}`);
 
   //Deploiement de DiplomaNft
   const DiplomaNft = await hre.ethers.getContractFactory("DiplomaNft");
   const diplomaNft = await DiplomaNft.deploy(diplomaFile.target);
   await diplomaNft.waitForDeployment();
-  console.log(`DiplomaNft contract has been deployer at ${diplomaNft.target}`);
+  console.log(`DiplomaNft contract has been deployed at ${diplomaNft.target}`);
 
   //Creation d'une date arbitraire en secondes pour date des diplômes
   let date = new Date("2000-01-01"); 

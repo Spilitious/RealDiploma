@@ -5,14 +5,15 @@ import {
   Td,
   Spinner,
   Alert,
-  AlertIcon, Box, Text, useToast,
+  AlertIcon, Box, Text, useToast, Table,
   useColorModeValue, Button } from '@chakra-ui/react';
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt,  useAccount } from 'wagmi';
 import { RdaContext } from '@/utils';
 import Countdown from './Countdown';
 import GetOneDispute from './GetOneDispute'
+import Resolve from './Resolve';
 
-const GetOneVote = ({ Ind }) => {
+const GetOneVote = ({ Status, Owner, Ind }) => {
   //UseContext  
   const { contractAddress, contractAbi, getEvents, votingDelay, isVoter, voterTimeRegistration} = useContext(RdaContext);
   
@@ -21,27 +22,38 @@ const GetOneVote = ({ Ind }) => {
   const [ yes, setYes ]  = useState();
   const [ no, setNo ]  = useState();
   const [ totalTokenSquare, setTotalTokenSquare ]  = useState();
-  const [ choice, setChoice] = useState(0)
+  const [ choice, setChoice] = useState()
+  const [hasVoted, setHasVoted] = useState();
   
   //State pour la gestion de la transaction de lecture
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [disputer, setDisputer] = useState();
   
   const hoverBgColor = useColorModeValue("green.100", "teal.800");
   const selectedBgColor = useColorModeValue("green.100", "green.700");
   const toast = useToast();
   const address = useAccount();
   
-  //Hook de récupération 
-  const { data: hasVoted, error: hasVotedError, isPending: hasVotedPending } = useReadContract({
+  const { data: newDispute, error: disputeError, isPending: disputeIsPending} = useReadContract({
     address: contractAddress,
     abi: contractAbi,
-    functionName: 'getHasVoted',
-    args: [Ind, address]
+    functionName: 'getDisputeFromCaseIndex',
+    args: [Ind]
   });
 
+
+  useEffect(() => {
+    if (disputeError) {
+      setError(disputeError.message);
+      setIsLoading(false);
+    } else if (newDispute) {
+      setDisputer(newDispute.owner);
+    }
+  }, [newDispute, disputeError]);
+
   //Hook de récupération du vote
-  const { data: newVote, error: voteError, isPending: voteIsPending } = useReadContract({
+  const { data: newVote, error: voteError, isPending: voteIsPending, refetch} = useReadContract({
     address: contractAddress,
     abi: contractAbi,
     functionName: 'getVoteFromCaseIndex',
@@ -55,6 +67,7 @@ const GetOneVote = ({ Ind }) => {
       setError(voteError.message);
       setIsLoading(false);
     } else if (newVote) {
+      // refetch()
       setCreationTime(Number(newVote.creationTime));
       setYes(Number(newVote.yes));
       setNo(Number(newVote.no));
@@ -105,6 +118,8 @@ const { isSuccess: isConfirmed } =
     useEffect(() => {
         if(isConfirmed) {
             getEvents();
+            refetch();
+            refetchAll()
             toast({
                 title: "You voted successfully for  ".concat(choice),
                 status: "success",
@@ -139,30 +154,40 @@ const { isSuccess: isConfirmed } =
   }
 
   return (
-    <>
-    {getIsVoteOver(creationTime, votingDelay) ? (
-    <Text> Le vote est terminé </Text>) : (
-    <Box>
-   
     
-    <Countdown titre={"Temps à avant la fin du vote"} duration={getDuration(creationTime, votingDelay)}/>
-    <Tr><GetOneDispute Ind= {Ind}/></Tr>
-    <Tr height="20px" overflowY="auto">
-        {getAllowedToVote(voterTimeRegistration, creationTime, isVoter) == 0 ?  (<Box>Vous ne pouvez pas voter. Devenez électeur en bloquant vos tokens RDA pour participer à ce vote</Box>) : null}
-        {getAllowedToVote(voterTimeRegistration, creationTime, isVoter) == 1 ?  (<Box>Vous vous êtes enregistré trop tard pour participer à ce vote</Box>) : null}
-        {getAllowedToVote(voterTimeRegistration, creationTime, isVoter) == 2 ? (<Box>
-          <Td rowspan={2}><Button size="sm" colorScheme='teal' onClick={voteY}> Vote Yes </Button></Td>
-          <Td rowspan={2}><Button size="sm" colorScheme='teal' onClick={voteN}> Vote No </Button></Td>
-          </Box> ) :null}
-    </Tr></Box>)}
+    <Table >
+     
 
-    <Tr height="20px" overflowY="auto">
-    <Td style={{ textAlign: 'center' }} >Vote Pour </Td><Td style={{ textAlign: 'center' }} isNumeric>{yes}</Td>
-    <Td style={{ textAlign: 'center' }} >Vote Contre </Td><Td style={{ textAlign: 'center' }} isNumeric>{no}</Td>
-    <Td style={{ textAlign: 'center' }} >Poids des tokens engagés </Td><Td style={{ textAlign: 'center' }} isNumeric>{totalTokenSquare}</Td></Tr>
+     <Tr ><Td textAlign="center"  colSpan={6}><GetOneDispute  Ind= {Ind}/></Td></Tr>
+ {getIsVoteOver(creationTime, votingDelay) ? (
+      
+      <Tr > <Td textAlign="center" colSpan={6}> <Resolve Owner={getOwner(yes, no,  Owner, disputer)} Id={Ind} /></Td></Tr>) : (
     
-    </>
-  );
+       <>
+      <Tr>
+        {getAllowedToVote(voterTimeRegistration, creationTime, isVoter) == 0 ?  (<Td textAlign="center" colSpan={6}>Vous ne pouvez pas voter. Devenez électeur en bloquant vos tokens RDA pour participer à ce vote</Td>) : null}
+        {getAllowedToVote(voterTimeRegistration, creationTime, isVoter) == 1 ?  (<Td textAlign="center" colSpan={6}>Vous vous êtes enregistré trop tard pour participer à ce vote</Td>) : null}
+       
+      </Tr>
+
+        {getAllowedToVote(voterTimeRegistration, creationTime, isVoter) == 2 ? (
+           <>
+          {true ? (<>
+          <Tr ><Td textAlign='center' colSpan={2}><Button size="sm" colorScheme='teal' onClick={voteY}> Voter pour valider  </Button></Td>
+          <Td textAlign='center' colSpan={2}><Button size="sm" colorScheme='teal' onClick={voteN}> Voter pour rejeter </Button></Td>
+          <Td textAlign='right' colSpan={1}><Countdown titre={"Temps à avant la fin du vote"} duration={getDuration(creationTime, votingDelay)}/></Td></Tr> </>):(
+
+            <Td textAlign="center" colSpan={6}>Vous avez voté ! </Td>) }
+          </> ) : null}</>)}
+
+    <Tr ><Td width="18%" style={{ textAlign: 'center' }} >Vote diplôme vrai </Td><Td width="7%" style={{ textAlign: 'center' }} isNumeric>{yes}</Td>
+    <Td width="18%"style={{ textAlign: 'center' }} >Vote diplôme faux </Td><Td width="7%"style={{ textAlign: 'center' }} isNumeric>{no}</Td>
+    <Td width="35%"style={{ textAlign: 'center' }} >Poids des tokens engagés </Td><Td width="15%" style={{ textAlign: 'center' }} isNumeric>{totalTokenSquare/10**18}</Td></Tr>
+    
+    </Table>
+    
+  )
+  
 }
 
 
@@ -199,5 +224,13 @@ function getIsVoteOver(voteCreationTime, votingDelay)
   
   return true;
 
+}
+
+function getOwner(yes, no,  caseOwner, disputeOwner)
+{
+  if(yes > no )
+    return caseOwner
+  else
+    return disputeOwner
 }
 

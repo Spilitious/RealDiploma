@@ -78,19 +78,16 @@ const GetOneDiploma = ({ Ind }) => {
   }
 
   return (
-    <Tr //key={Id} 
-       
-       // _hover={{ bg : hoverBgColor  }}
-        height="20px"
-        overflowY="auto"
-        >
-        <Td width="20%" borderColor="teal.500" borderWidth="2px">{lastName} </Td>
-        <Td  width="20%" borderColor="teal.500" borderWidth="2px">{firstName} </Td>
-        <Td  width="20%" borderColor="teal.500" borderWidth="2px" style={{ textAlign: 'center' }} isNumeric>{getDate(birthday)}</Td>
-        <Td  width="20%" borderColor="teal.500" borderWidth="2px">{school} </Td>
-        <Td  width="20%" borderColor="teal.500" borderWidth="2px">{title} </Td>
-        <Td  width="20%" borderColor="teal.500" borderWidth="2px" style={{ textAlign: 'center' }} isNumeric>{getDate(diplomaDate)}</Td>
-    </Tr>
+    <>
+     
+        
+        <Td borderColor="teal.500" textAlign="center" borderWidth="2px">{lastName} </Td>
+        <Td borderColor="teal.500" textAlign="center" borderWidth="2px">{firstName} </Td>
+        <Td borderColor="teal.500" textAlign="center" borderWidth="2px" style={{ textAlign: 'center' }} isNumeric>{getDate(birthday)}</Td>
+        <Td borderColor="teal.500" textAlign="center" borderWidth="2px">{school} </Td>
+        <Td borderColor="teal.500" textAlign="center" borderWidth="2px">{title} </Td>
+        <Td borderColor="teal.500" textAlign="center" borderWidth="2px" style={{ textAlign: 'center' }} isNumeric>{getDate(diplomaDate)}</Td>
+    </>
   );
 }
 

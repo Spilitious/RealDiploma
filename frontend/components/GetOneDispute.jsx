@@ -73,8 +73,7 @@ const GetOneDispute = ({ Ind }) => {
 
   return (
     <>
-    <Tr height="20px" overflowY="auto">
-    <Td style={{ textAlign: 'center' }} >{owner} a contesté ce dossier avec la preuve {proof}</Td></Tr>
+    {owner} a contesté ce dossier avec la preuve {proof}
     </>
   );
 }

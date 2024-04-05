@@ -1,20 +1,10 @@
-import { Flex, Button, useToast, Table, Tbody, Thead, Tr, Input, Text, Alert, AlertIcon, Box } from '@chakra-ui/react';
+import { Flex, Button, useToast, Table, Tbody, Thead, Tr, Input, Text, Alert, AlertIcon, Td, Box } from '@chakra-ui/react';
 import { useContext, useState, useEffect } from 'react';
 import { RdaContext } from '@/utils';
-import { ethers } from 'ethers';
-
-import { RdaAddress, RdaAbi  } from '@/constants'
-import  Browser from './Browser'
-import ApproveButton from './ApproveButton'
-
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useAccount } from 'wagmi'
-import { getEventSelector } from 'viem';
-// import WorkflowManager from './WorkflowManager';
-// import ActionContainer from './ActionContainer';
-// import Events from './Events';
 
 
-const SimpleResolve = ({Owner, Id}) => {
+const GetReward = ({Owner, Id}) => {
     
         const { contractAddress, contractAbi, getEvents, refetchAll } = useContext(RdaContext);
         const toast = useToast();
@@ -35,13 +25,13 @@ const SimpleResolve = ({Owner, Id}) => {
         });
     
 
-        const simpleResolve = async () => {
-            
+        const getReward = async () => {
+            console.log("Id", Id)
             writeContract({ 
                 address: contractAddress, 
                 abi: contractAbi,
-                functionName: 'simpleResolve', 
-                args: [Id]
+                functionName: 'getRewardFromVote', 
+                args: [Number(Id)]
             })
         };
     
@@ -53,9 +43,9 @@ const SimpleResolve = ({Owner, Id}) => {
         useEffect(() => {
             if(isConfirmed) {
                 getEvents();
-                refetchAll();
+                refetchAll()
                 toast({
-                    title: "Diploma validated successfully",
+                    title: "Récompenses récupéré avec succès",
                     status: "success",
                     duration: 3000,
                     isClosable: true,
@@ -73,20 +63,17 @@ const SimpleResolve = ({Owner, Id}) => {
                     <AlertIcon />
                     Diploma validated successfully.
                 </Alert>}
-            
-            {address == Owner ? (
-            <>
-            <Text> Aucune contestation n'a été faite, vous pouvez valider votre diplôme et récupérer votre collatéral </Text>
-            <Button colorScheme='teal'  size='md' m={4}  onClick={simpleResolve}> Valider </Button>
-            </>) : (
-            
-            <Text>Aucune contestation n'a été faite dans le délai imparti, ce diplôme peut être validé par son propriétaire</Text>
-            
-               
-            )}
-        </>
-        )
+                {Owner == address ? (
+                <>
+               <Tr><Td> <Text>Le vote est en votre faveur </Text></Td>
+                <Td><Button colorScheme='teal'  size='md' m={4}  
+                        onClick={getReward}> Récupérer ses récompenses </Button>
+                
+                </Td></Tr></>) :(null)}
+                </>
+                )
+      
       
     }
 
-export default SimpleResolve;
+export default Reward;

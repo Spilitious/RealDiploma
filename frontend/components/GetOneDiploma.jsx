@@ -10,7 +10,7 @@ import {
   Box,
   Button,
   useColorModeValue } from '@chakra-ui/react';
-import { useReadContract } from 'wagmi';
+import { useReadContract, useAccount } from 'wagmi';
 import { RdaContext } from '@/utils';
 import GetOneDip from './GetOneDip';
 import ContestProof from './ContestProof';
@@ -21,19 +21,20 @@ import SimpleResolve from './SimpleResolve'
 import Resolve from './Resolve'
 import { confluxESpaceTestnet, mintSepoliaTestnet } from 'viem/chains';
 import BecomeVoter from './BecomeVoter';
-
+import GetOneDispute from './GetOneDispute';
 import { resolve } from 'styled-jsx/css';
 
 const GetOneDiploma = ({ Id }) => {
 
   //UseContest
-  const { contractAddress, contractAbi, contestDelay, votingDelay, selectedCase, setSelectedCase} = useContext(RdaContext);
+  const { contractAddress, contractAbi, contestDelay, votingDelay, selectedCase, setSelectedCase, refresh} = useContext(RdaContext);
   
   //useState pour la structrure File
   const [owner, setOwner] = useState("");
   const [creationTime, setCreationTime] = useState(0);
   const [status, setStatus] = useState(0);
   const [action, setAction] = useState(0)
+  const { address } = useAccount();
   
   const [diplomaIndex, setDiplomaIndex] = useState(0);
 
@@ -58,7 +59,7 @@ const GetOneDiploma = ({ Id }) => {
   
 
   
-  const { data: newDiploma, error: diplomaError, isPending: diplomaIsPending } = useReadContract({
+  const { data: newDiploma, error: diplomaError, isPending: diplomaIsPending, refetch } = useReadContract({
     address: contractAddress,
     abi: contractAbi,
     functionName: 'getCase',
@@ -80,7 +81,10 @@ const GetOneDiploma = ({ Id }) => {
     }
   }, [newDiploma, diplomaError]);
 
- 
+  useEffect(() => {
+    console.log("refetch")
+      refetch();
+  }, [refresh]);
 
   if (isLoading) {
     return (
@@ -106,37 +110,47 @@ const GetOneDiploma = ({ Id }) => {
   }
 
   return (
-    <Box   > 
-      {/* _hover={{ bg : hoverBgColor  }} */}
+    <> 
+      {refresh }
+     
        
-        <Tr textAlign="center" fontSize="xl" color="teal.500" fontWeight="bold" borderColor="teal.500" borderWidth="2px"> Diplôme n° {Number(Id)+1} </Tr>
-        <Tr width='1000px'><GetOneDip  key={Id} Ind={Id} /></Tr>
-        <Tr width='100%'>
-        <Td width='33%' borderColor="teal.500" borderWidth="2px">{owner}</Td>
-        <Td width='33%' borderColor="teal.500" borderWidth="2px" style={{ textAlign: 'center' }} isNumeric>{getStatus(status)}</Td>
-        <Td width='33%' borderColor="teal.500" borderWidth="2px" style={{ textAlign: 'center' }} isNumeric>{getDate(creationTime)}</Td>
+       
+        <Table >
+        <Tr><GetOneDip width="100%" key={Id} Ind={Id} /></Tr>
+        <Tr>
+        <Td  colSpan={4} textAlign="center" borderColor="teal.500" borderWidth="2px">{owner}</Td>
+        <Td  borderColor="teal.500" borderWidth="2px" style={{ textAlign: 'center' }} isNumeric>{getDate(creationTime)}</Td>
+        <Td  borderColor="teal.500" borderWidth="2px" style={{ textAlign: 'center' }} isNumeric>{getStatus(status)}</Td>
         </Tr>
 
-        <Box>
-            {getAction(status, creationTime, contestDelay, votingDelay) == 1 ? <Countdown titre={"Temps à avant validation automatique"} duration={getDuration(creationTime, contestDelay)}/> :  null}
+        <Tr>
+            {getAction(status, creationTime, contestDelay, votingDelay) == 1 ? <Td colSpan={4}><ContestProof Id={Id} /></Td> : null}
+            {getAction(status, creationTime, contestDelay, votingDelay) == 1 ? <Td colSpan={2}><Countdown titre={"Temps avant validation automatique"} duration={getDuration(creationTime, contestDelay)}/> </Td> :  null}
+        
+            {getAction(status, creationTime, contestDelay, votingDelay) == 0 ?  <Td colSpan={6} textAlign="center"><SimpleResolve Owner={owner} Id={Id}/></Td> :  null} 
+         
+            {(getAction(status, creationTime, contestDelay, votingDelay) == 2 && owner==address)? <Td colSpan={6} textAlign="center"><Mint Owner={owner} Id={Id} /></Td> : null }
+        
+            {getAction(status, creationTime, contestDelay, votingDelay) == 3 ? <Td colSpan={6}><GetOneVote Owner={owner} Ind={Id} /></Td> : null}
+
+            {getAction(status, creationTime, contestDelay, votingDelay) == 4 ?<Td colSpan={6}><GetOneVote Status={status} Owner={owner} Ind={Id} /></Td> : null}
             
            
-
-        </Box>
-        <Box>
-            {getAction(status, creationTime, contestDelay, votingDelay) == 1 ? <ContestProof Id={Id} /> : null}
-            {getAction(status, creationTime, contestDelay, votingDelay) == 0 ? <SimpleResolve Owner={owner} Id={Id}/> :  null}
-            {getAction(status, creationTime, contestDelay, votingDelay) == 3 ? <GetOneVote Ind={Id} /> : null}
-            {getAction(status, creationTime, contestDelay, votingDelay) == 2 ? <Mint Owner={owner} Id={Id} /> : null }
-            {getAction(status, creationTime, contestDelay, votingDelay) == 4 ? <Box><GetOneVote Ind={Id} /><Resolve Id={Id}/></Box> : null}
+        </Tr>
+       
+            
            
+           
+           
+            {/* {getAction(status, creationTime, contestDelay, votingDelay) == 4 ? <Box><GetOneVote Ind={Id} /><Resolve Id={Id}/></Box> : null} */}
+            
 
-        </Box>
-            <Box>
+        {/* </Box> */}
+            {/* // <Box> */}
             {/* {true ? <GetOneVote Ind={event.index} /> : null} */}
-            </Box>
-        
-    </Box>
+            {/* </Box> */}
+        </Table>
+    </>
   );
 }
 
@@ -146,23 +160,22 @@ export default GetOneDiploma;
 
 function getStatus(id) {
     switch(id) {
-        case 0 : return "Pending";
-        case 1 : return "Validated";
-        case 2 : return "Disputed";
-        case 3 : return "Rejected";
+        case 0 : return "En cours";
+        case 1 : return "Validé";
+        case 2 : return "Contesté";
+        case 3 : return "Rejecté";
         default : return "Unknown";
     }
 }
-
 function getDate(timestamp) {
   const date = new Date(timestamp * 1000);
 
-  const day = date.getDate();
-  const month = date.getMonth() + 1; 
+  const day = String(date.getDate()).padStart(2, '0'); // Ajoute un zéro devant si le jour est inférieur à 10
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Ajoute un zéro devant si le mois est inférieur à 10
   const year = date.getFullYear();
   
   // Formater la date en chaîne de caractères
-  const formattedDate = `${day}/${month}/${year}`;
+  const formattedDate = `${year}/${month}/${day}`;
   return formattedDate;
   }
 
@@ -175,22 +188,23 @@ function getDate(timestamp) {
     if(status ==0) {
       
       if((creationTime + Number(contestDelay)) < timestamp)
-        return 0;
+        return 0;  // peut être constesté
         
       if((creationTime + Number(contestDelay))>= timestamp)
-       return 1;
+       return 1; //  ne plus être contesté, peut être validé par son proprio
     }
   
     if(status ==1 )
       return 2;
-    
+
     if(status ==2) {
-      
+        return 3;
+      /*
         if((creationTime + Number(votingDelay)) >= timestamp)
          return 3;
    
-        if((creationTime + Number(contestDelay)) <= timestamp)
-         return 4;
+        if((creationTime + Number(votingDelay)) < timestamp)
+         return 4;  */
     }
   };
 

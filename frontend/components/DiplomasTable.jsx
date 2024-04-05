@@ -1,6 +1,6 @@
 'use client';
 import React, { useContext, useEffect, useState } from 'react';
-import { Heading, Box, Table, Thead, Tbody, Button, Tr, Th, TableContainer, useColorModeValue } from '@chakra-ui/react';
+import { Heading, Box, Table, Thead, Tbody, Button, Tr, Th, Text, TableContainer, useColorModeValue } from '@chakra-ui/react';
 import { RdaContext } from '@/utils';
 import GetOneDiploma from './GetOneDiploma'; 
 import GetOneDip from './GetOneDip';
@@ -10,12 +10,8 @@ import GetOneVote from './GetOneVote';
 const DiplomasTable = (refreshTable = false) => {
     const { events, getEvents, selectedCase, setSelectedCase } = useContext(RdaContext);
     const [diplomas, setDiplomas] = useState([]);
-    const [dips, setDips] = useState([]);
-    const [isOpen, setIsOpen] = useState();
-    
     const headTextColor = useColorModeValue("green.500", "green.200");
     const tableBgColor = useColorModeValue("gray.50", "gray.700");
-    
     const hoverBgColor = useColorModeValue("green.100", "teal.800");
     const selectedBgColor = useColorModeValue("green.100", "green.700");
 
@@ -24,45 +20,41 @@ const DiplomasTable = (refreshTable = false) => {
         setSelectedCase(rowNumber);
     }
 
-      
-
     useEffect(() => {
-        getEvents(); // Récupérer les événements
+        getEvents(); 
     }, [], events);
 
     useEffect(() => {
+        
         // Filtrer les événements pour ne garder que les événements de type 'CreateNewCaseEvent'
         const diplomaAddedEvents = events.filter(event => event.type === 'CreateCase');
-        // diplomaAddedEvents.reverse();
-        
-        const dipAddedEvents = events.filter(event => event.type === 'CreateDiploma');
-        dipAddedEvents.reverse();
-        
         setDiplomas(diplomaAddedEvents.map((event) => ( 
         <Box  key={event.index}
-             //_hover={{ bg : hoverBgColor  }}
-              onClick={() => handleRowClick(event.index)}
-              overflowY="auto"
-              width="1000px"
-              borderColor="teal.500" borderWidth="2px">
+              //   onClick={() => handleRowClick(event.index)}
+              marginBottom={10}
+             
+             
+              borderColor="blue.500" borderWidth="2px">
+             <Text textAlign="center" fontSize="xl" color="teal.500" fontWeight="bold" borderColor="teal.500" borderWidth="2px"> Diplôme n° {Number(event.index)+1} </Text>
              <GetOneDiploma key={event.index} Id={event.index} />
-            </Box>)))
+        </Box>)))
          
     }, [events]);
 
     return (
-
-        <TableContainer
-            height='100%'
-            width="100%"
-            overflowY="auto"
+    <TableContainer  height='auto' overflow="yes">
+        <Table 
+           // height='100%'
+            width="90%"
+           
             // overflowX="auto"
-            bg={tableBgColor}>
+            // bg={tableBgColor}
+            >
                 
-            <Table>
+           
                     {diplomas} 
-            </Table>
-        </TableContainer>
+           
+        </Table></TableContainer>
 
     );
 };

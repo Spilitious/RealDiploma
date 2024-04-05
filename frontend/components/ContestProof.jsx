@@ -10,7 +10,7 @@ import ApproveButton from './ApproveButton';
 import { ethers } from 'ethers';
 
 const ContestProof = ({Id}) => {
-    const { contractAbi, contractAddress, events, getEvents, price  } = useContext(RdaContext);
+    const { contractAbi, contractAddress, events, getEvents, price, userAllowance, refetchAll  } = useContext(RdaContext);
     const [selectedProof, setSelectedProof] = useState();
     const [ needApproval, setNeedApproval] = useState(true);
     const [ approval, setApproval] = useState(0);
@@ -54,7 +54,7 @@ const ContestProof = ({Id}) => {
 
 
 
-    const { data: hash, writeContract } = useWriteContract({
+    const { data: hash, writeContract, writeContractAsync } = useWriteContract({
         mutation: {
           onError: (error) => {
             console.log(error);
@@ -70,6 +70,15 @@ const ContestProof = ({Id}) => {
     
 
     const dispute = async () => {
+      if(userAllowance < 100) {
+        await writeContractAsync({
+            address: RdaAddress, 
+            abi: RdaAbi,
+            functionName: 'approve', 
+            args: [contractAddress, price]
+        })}
+       
+
         writeContract({ 
             address: contractAddress, 
             abi: contractAbi,
@@ -83,15 +92,16 @@ const ContestProof = ({Id}) => {
             hash, 
         })
     
-        useEffect(() => {
-            if(isConfirmed) {
-                getEvents();
-                toast({
-                    title: "You disputed tis case successfully with proof ".concat(selectedProof),
-                    status: "success",
-                    duration: 3000,
-                    isClosable: true,
-                });
+    useEffect(() => {
+        if(isConfirmed) {
+          getEvents();
+          refetchAll()
+              toast({
+                title: "You disputed tis case successfully with proof ".concat(selectedProof),
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+              });
         }
     }, [isConfirmed])
   
@@ -99,7 +109,7 @@ const ContestProof = ({Id}) => {
     return (
       
       <Box marginTop={5}>
-        <Box marginBottom={5} overflowWrap="break-word" whiteSpace="pre-wrap" >Vous pouvez contester ce diplôme en choisissant une des raisons ci-dessous. Vous devez déposer {Number(price)/(10**18)} tokens en collatéral. Le diplôme sera alors soumis à un vote</Box>
+        <Box marginBottom={5} overflowWrap="break-word" maxW="80%" whiteSpace="pre-wrap" >Vous pouvez contester ce diplôme en choisissant une des raisons ci-dessous. Vous devez déposer {Number(price)/(10**18)} tokens en collatéral. Le diplôme sera alors soumis à un vote</Box>
         <RadioGroup colorScheme="teal" value={selectedProof} >
             <Stack direction="column" spacing={3}>
         <Radio value={0} onChange={() => handleRadioChange(0)}>
@@ -111,21 +121,11 @@ const ContestProof = ({Id}) => {
         <Radio value={2} onChange={() => handleRadioChange(2)}>
           impossible, j'le connais il sait même pas compter
         </Radio>
-      </Stack>
-
-
+        </Stack>
         </RadioGroup>
-        {needApproval ? (
-                    <Box>
-                    <ApproveButton amount={Number(price)}/>
-                    </Box>)
-                    : (
-                    <Box >
-                   <Button isDisabled={getLogic(selectedProof)} colorScheme='teal'  size='md' m={4} onClick={dispute}> Contester </Button>
-                    </Box>)
-        }              
-         </Box>
-      );
+        <Button isDisabled={getLogic(selectedProof)} colorScheme='teal'  size='md' m={4} onClick={dispute}> Contester </Button>
+        </Box>
+    );
 };
 
 export default ContestProof;

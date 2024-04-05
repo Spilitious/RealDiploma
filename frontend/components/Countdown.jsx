@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Box, Text } from '@chakra-ui/react';
+import { RdaContext } from '@/utils';
 
 function Countdown({ titre, duration }) {
   const [secondsLeft, setSecondsLeft] = useState(duration);
+  const {refetch} = useContext(RdaContext);
 
   useEffect(() => {
+    if(secondsLeft < 1)
+      refetch();
+
     const intervalId = setInterval(() => {
-      setSecondsLeft(prevSeconds => (prevSeconds > 0 ? prevSeconds - 1 : 0));
+      setSecondsLeft(prevSeconds => (prevSeconds >= 1 ? prevSeconds - 1 : 0));
     }, 1000);
 
     return () => clearInterval(intervalId);
@@ -22,16 +27,16 @@ function Countdown({ titre, duration }) {
   
   return (
     <Box
-      backgroundColor="teal.500"
+      backgroundColor="red.300"
       color="white"
-      padding={4}
+      padding={1}
       borderRadius="md"
       boxShadow="md"
       textAlign="center"
     >
       
-      <Text fontSize="xl"> {titre}</Text>
-      <Text fontSize="3xl" fontWeight="bold" marginTop={2}>{formatTime(secondsLeft)}</Text>
+      <Text fontSize="md"> {titre}</Text>
+      <Text fontSize="md" fontWeight="bold" marginTop={2}>{formatTime(secondsLeft)}</Text>
     </Box>
   );
 }
