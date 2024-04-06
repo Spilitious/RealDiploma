@@ -202,7 +202,7 @@ export const RdaProvider = ({ children }) => {
           address: contractAddress,
           event: parseAbiItem('event CreateNewCaseEvent(uint index, address owner, uint creationTime)'),
           // du premier bloc
-          fromBlock: 0n,
+          fromBlock: 5641993n,
           // jusqu'au dernier
           toBlock: 'latest' // Pas besoin valeur par défaut
         })
@@ -213,7 +213,7 @@ export const RdaProvider = ({ children }) => {
           address: contractAddress,
           event: parseAbiItem('event SimpleResolve(uint index)'),
           // du premier bloc
-          fromBlock: 0n,
+          fromBlock: 5641993n,
           // jusqu'au dernier
           toBlock: 'latest' // Pas besoin valeur par défaut 
         })
@@ -224,7 +224,7 @@ export const RdaProvider = ({ children }) => {
             address: contractAddress,
             event: parseAbiItem('event CreateNewDisputeEvent(address owner, uint index, uint8 proof)'),
             // du premier bloc
-            fromBlock: 0n,
+            fromBlock: 5641993n,
             // jusqu'au dernier
             toBlock: 'latest' // Pas besoin valeur par défaut
           })
@@ -235,7 +235,7 @@ export const RdaProvider = ({ children }) => {
             address: contractAddress,
             event: parseAbiItem('event BecomeVoterEvent(address voter, uint amount)'),
             // du premier bloc
-            fromBlock: 0n,
+            fromBlock: 5641993n,
             // jusqu'au dernier
             toBlock: 'latest' // Pas besoin valeur par défaut
           })
@@ -244,7 +244,7 @@ export const RdaProvider = ({ children }) => {
             address: contractAddress,
             event: parseAbiItem('event ResolveAfterVoteEvent(uint indexFile, uint8 status)'),
             // du premier bloc
-            fromBlock: 0n,
+            fromBlock: 5641993n,
             // jusqu'au dernier
             toBlock: 'latest' // Pas besoin valeur par défaut
           })
