@@ -121,24 +121,26 @@ const CreateCase = () => {
                 alignItems="center"
                 width="70%"
                 mt="1rem"
+                bg="gray.200"
+                // bgGradient="linear(to-b, gray.100, white)"
+                borderColor="teal.500" borderWidth="2px"
                 direction="column">
                 
                 
-                <Box marginBottom={10} fontSize="xl"  textAlign="center" > Veuillez renseigner les éléments du diplôme que vous souhaitez déposer </Box>
-                <Table><Tbody>
+                <Box marginBottom={10} marginTop={8} fontSize="xl"  textAlign="center" > Veuillez renseigner les éléments du diplôme que vous souhaitez déposer </Box>
+                <Table width="80%"><Tbody>
                    
-                <Tr><Input  borderColor="teal.500" borderWidth="2px" placeholder="Entrez le nom de famille inscrit sur le diplôme" 
+                <Tr><Input   bg="white" borderColor="black" borderWidth="1px" placeholder="Entrez le nom de famille inscrit sur le diplôme" 
                             value={lastName} onChange={(e) => setLastName(e.target.value)} /></Tr>
-                <Tr><Input  borderColor="teal.500" borderWidth="2px"  placeholder="Entrez le prénom inscrit sur le diplôme"
+                <Tr><Input  bg="white" borderColor="black" borderWidth="1px"   placeholder="Entrez le prénom inscrit sur le diplôme"
                                 value={firstName} onChange={(e) => setFirstName(e.target.value)} /></Tr>
-                <Tr><Input  borderColor="teal.500"  borderWidth="2px"  placeholder={"Entrez la date(AAAA/MM/JJ) de naissance inscrite sur le diplôme "}
+                <Tr><Input  bg="white" borderColor="black" borderWidth="1px"  placeholder={"Entrez la date(AAAA/MM/JJ) de naissance inscrite sur le diplôme "}
                                 value={birthday} onChange={(e) => setBirthday(e.target.value)} /></Tr>
-                <Tr><Input  borderColor="teal.500"  borderWidth="2px"  placeholder={"Entrez l'école qui a délivré le diplôme"}
+                <Tr><Input  bg="white" borderColor="black" borderWidth="1px"  placeholder={"Entrez l'école qui a délivré le diplôme"}
                                 value={school} onChange={(e) => setSchool(e.target.value)} /></Tr>
-                <Tr><Input  borderColor="teal.500" borderWidth="2px" placeholder={"Entrez l'intitulé du diplôme"}
+                <Tr><Input  bg="white" borderColor="black" borderWidth="1px" placeholder={"Entrez l'intitulé du diplôme"}
                                 value={title} onChange={(e) => setTitle(e.target.value)} /></Tr>
-                <Tr><Input  borderColor="teal.500"
-                                borderWidth="2px"
+                <Tr><Input  bg="white" borderColor="black" borderWidth="1px"
                                 placeholder={"Entrez la date(AAAA/MM/JJ) d'obtention du diplôme "} value={diplomaDate} onChange={(e) => setDiplomaDate(e.target.value)} /></Tr>
                 </Tbody></Table>
               

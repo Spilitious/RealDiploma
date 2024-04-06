@@ -14,7 +14,7 @@ const NotConnected = () => {
       height="100vh" 
       width="100%"
       marginTop={40}
-      bgImage={bg}
+      //bgImage={bg}
       bgPos="center"
       bgSize='cover'
       bgRepeat='no-repeat'

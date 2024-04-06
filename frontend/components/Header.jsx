@@ -16,6 +16,7 @@ const Header = () => {
       p="2rem"
       height="5rem" // Hauteur ajustée du header
       color="white" // Couleur du texte en blanc pour contraster avec le fond
+      bgGradient="linear(to-b, gray.500, white)"
     >
       {/* Couche d'arrière-plan floutée */}
       <Box
@@ -31,11 +32,12 @@ const Header = () => {
 
       {/* Contenu de l'en-tête : Logo et Toggle à gauche, ConnectButton à droite */}
       <Box display="flex" alignItems="center">
-        <Image
-          src={logo}
-          alt="Voting dApp Logo"
-          h="50px"
-        />
+      <Image
+          src="./public/Icone2.png" // chemin local de votre image
+        alt="Description de l'image"
+        w={50} // largeur de l'image
+        h={50} // hauteur de l'image
+    />
         {/* Ajout de marge à gauche du Toggle pour éviter le chevauchement */}
         {/* <Toggle ml="2rem" /> ml (margin left) ajoute de l'espace à gauche */}
       </Box>

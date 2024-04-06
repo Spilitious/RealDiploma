@@ -12,6 +12,7 @@ import Events from './Events';
 
 const RealDiploma = () => {
     
+
     const bgColor = useColorModeValue('white', 'gray.800');
     const { page } = useContext(RdaContext);
     let content1;
@@ -36,12 +37,12 @@ const RealDiploma = () => {
 
 
     return (
-        <Flex marginTop='200px' direction="column" width="100%" height="100vh" overflowY="auto" p={10} bg={bgColor}>
-            <Box >
+        <Flex  marginTop='150px' direction="column" width="100%" height="100vh" overflowY="auto" p={10}  >
+            <Box bgGradient="linear(to-r, teal.300, blue.500)">
                 <Browser />
             </Box>
 
-            <Flex flex="1" marginTop='120px'  direction="column" alignItems='center' overflowY="auto">
+            <Flex  flex="1" marginTop='120px'  direction="column" alignItems='center' overflowY="auto">
                 {content1}
             </Flex>
         </Flex>
