@@ -147,11 +147,18 @@ describe("TEST", function () {
                 await expect(rda.connect(user1).mint(user1, 1000))
                     .to.be.revertedWithCustomError(rda, "OwnableUnauthorizedAccount");
             });
-    
+    /*
             it('should get _totalSupply', async function() {
                 expect(await rda.connect(user1).maxSupply()).to.be.equal(BigInt(10**7))
                   
             });
+
+            
+            it.only('should revert with TotalReached', async function() {
+                expect(await rda.mint(user0, 10**8)).to.be.equal(BigInt(10**7))
+                        .to.be.revertedWithCustomError(rda, "ErrorTotalSupplyReached");
+                  
+            }); */
         });
     
     
@@ -174,6 +181,23 @@ describe("TEST", function () {
     
    /* ******************************************************* Create Case  ******************************************************************** */
    describe("Phase 1 : BecomeVoter & CreateFile", function () {
+
+        describe("Function set... disputeDelay / VotingDely ", function () {
+        
+            it('should revert cause of non the owner', async function() {
+            await expect(diplomaFile.connect(nonUser1).setDisputeDelay(4))
+                .to.be.revertedWithCustomError( rda,"OwnableUnauthorizedAccount")
+                
+            }); 
+
+
+            it('should revert cause of non the owner', async function() {
+            await expect(diplomaFile.connect(nonUser1).setVotingDelay(4))
+                .to.be.revertedWithCustomError( rda,"OwnableUnauthorizedAccount")
+                
+            }); 
+        });
+
 
         describe("Function becomeAVoter", function () {
         
@@ -885,6 +909,18 @@ describe("TEST", function () {
                     .to.be.revertedWithCustomError( diplomaFile,"ErrorNoReward")
                     .withArgs("Already claimed");
                 }); 
+
+                it('should get true ', async function() {
+                   
+                    await diplomaFile.connect(voter1).getRewardFromVote(1);
+                    expect( await diplomaFile.getHasClaimedOnCase(1, voter1))
+                    .to.be.equal(true);
+                }); 
+
+                it('should get true ', async function() {
+                     expect( await diplomaFile.getHasVotedOnCase(1, voter1))
+                    .to.be.equal(true);
+                }); 
     
     
                 it('should set the hasClaimed to true', async function() {
@@ -893,6 +929,7 @@ describe("TEST", function () {
                     expect(await diplomaFile.getHasClaimed(0,voter1)).to.be.equal(true);
                     
                 }); 
+
     
                 it('should transfer the token to voter2', async function() {
                     const [,,,,token] = await diplomaFile.getVoteFromCaseIndex(1);

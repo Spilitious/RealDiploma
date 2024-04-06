@@ -36,12 +36,12 @@ const RealDiploma = () => {
 
 
     return (
-        <Flex marginTop='30px' direction="column" width="100%" height="auto" overflowY="hidden" p={10} bg={bgColor}>
+        <Flex marginTop='200px' direction="column" width="100%" height="100vh" overflowY="auto" p={10} bg={bgColor}>
             <Box >
                 <Browser />
             </Box>
 
-            <Flex flex="1" marginTop='80px'  direction="column" alignItems='center' overflowY="auto">
+            <Flex flex="1" marginTop='120px'  direction="column" alignItems='center' overflowY="auto">
                 {content1}
             </Flex>
         </Flex>

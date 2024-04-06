@@ -31,7 +31,7 @@ async function simpleResolve() {
     /* ********************************************************** Execution *********************************************************** */
 
     // Resolution du dossier 0 - Pas eu de contestation 
-    await diplomaFile.setContestDelay(0)
+    //await diplomaFile.setContestDelay(0)
     const userBalanceBefore = await rda.balanceOf(user0);
     let [,statusBefore,] = await diplomaFile.getCase(0);
     await diplomaFile.simpleResolve(0);

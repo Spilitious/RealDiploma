@@ -44,7 +44,7 @@ const Browser = () => {
                         <Th _hover={{ bg : hoverBgColor  }} 
                             style={{ textAlign: 'center' }}
                              onClick={() => handleClick(1)}>
-                        Devenir un juré </Th>
+                        Devenir juré </Th>
 
                         <Th _hover={{ bg : hoverBgColor  }}
                              style={{ textAlign: 'center' }}

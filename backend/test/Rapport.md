@@ -118,15 +118,15 @@ TEST
 -----------------------|----------|----------|----------|----------|----------------|
 File                   |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
 -----------------------|----------|----------|----------|----------|----------------|
- contracts/            |      100 |    94.44 |      100 |      100 |                |
+ contracts/            |      100 |    97.22 |      100 |      100 |                |
   DepositFactory.sol   |      100 |       90 |      100 |      100 |                |
   DiplomaFactory.sol   |      100 |      100 |      100 |      100 |                |
-  DiplomaFile.sol      |      100 |    94.23 |      100 |      100 |                |
+  DiplomaFile.sol      |      100 |    98.08 |      100 |      100 |                |
   DiplomaNft.sol       |      100 |      100 |      100 |      100 |                |
   RealDiplomaToken.sol |      100 |      100 |      100 |      100 |                |
   VoteFactory.sol      |      100 |      100 |      100 |      100 |                |
 -----------------------|----------|----------|----------|----------|----------------|
-All files              |      100 |    94.44 |      100 |      100 |                |
+All files              |      100 |    97.22 |      100 |      100 |                |
 -----------------------|----------|----------|----------|----------|----------------|
 
-Les branches non testés sont associés aux deux fonctions transfer qui envoie des tokens aux utilisateurs. Le chemin non testé correspond au revert de ces deux fonctions, revert qu'il n'est possible d'obtenir que lorsque le contrat n'a plus suffisant de fonds, cas qui consisterait à un hack du contrat.   
+Les branches non testés sont associés aux deux fonctions transfer qui envoie des tokens aux utilisateurs. Le chemin non testé correspond au revert de ces deux fonctions, revert qu'il n'est possible d'obtenir que lorsque le contrat n'a plus suffisamment de fonds, cas qui consisterait à un hack du contrat.   

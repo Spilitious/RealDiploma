@@ -36,7 +36,8 @@ const SimpleResolve = ({Owner, Id}) => {
     
 
         const simpleResolve = async () => {
-            
+            const date = new Date();
+            console.log(Math.floor(date.getTime() / 1000));
             writeContract({ 
                 address: contractAddress, 
                 abi: contractAbi,

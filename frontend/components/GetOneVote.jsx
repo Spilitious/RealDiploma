@@ -4,7 +4,7 @@ import {
   Tr,
   Td,
   Spinner,
-  Alert,
+  Alert, Stack,Radio, RadioGroup, 
   AlertIcon, Box, Text, useToast, Table,
   useColorModeValue, Button } from '@chakra-ui/react';
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt,  useAccount } from 'wagmi';
@@ -13,9 +13,9 @@ import Countdown from './Countdown';
 import GetOneDispute from './GetOneDispute'
 import Resolve from './Resolve';
 
-const GetOneVote = ({ Status, Owner, Ind }) => {
+const GetOneVote = ({ Owner, Ind }) => {
   //UseContext  
-  const { contractAddress, contractAbi, getEvents, votingDelay, isVoter, voterTimeRegistration} = useContext(RdaContext);
+  const { contractAddress, contractAbi, getEvents, votingDelay, isVoter, voterTimeRegistration, refetchAll} = useContext(RdaContext);
   
   //State pour la structure Vote
   const [ creationTime, setCreationTime ]  = useState();
@@ -33,15 +33,40 @@ const GetOneVote = ({ Status, Owner, Ind }) => {
   const hoverBgColor = useColorModeValue("green.100", "teal.800");
   const selectedBgColor = useColorModeValue("green.100", "green.700");
   const toast = useToast();
-  const address = useAccount();
+  const {address} = useAccount();
   
-  const { data: newDispute, error: disputeError, isPending: disputeIsPending} = useReadContract({
-    address: contractAddress,
-    abi: contractAbi,
-    functionName: 'getDisputeFromCaseIndex',
-    args: [Ind]
+  
+  
+  
+  const { data: hasVoted1, error: hasVotedError, isPending: hasVotedIsPending, refetch: refetchHasVoted} = useReadContract({
+        address: contractAddress,
+        abi: contractAbi,
+        functionName: 'getHasVotedOnCase',
+        args: [Ind, address]
   });
 
+          
+  useEffect(() => {
+      if (hasVotedError) 
+          console.log(hasVotedError.message);
+
+      else if (hasVoted1) 
+          setHasVoted(hasVoted1);
+  
+        }, [hasVoted1, hasVotedError]);
+
+
+  const { data: newDispute, error: disputeError, isPending: disputeIsPending} = useReadContract({
+      address: contractAddress,
+     abi: contractAbi,
+      functionName: 'getDisputeFromCaseIndex',
+     args: [Ind]
+    });
+
+  const handleRadioChange = (index) => {
+        
+    setChoice(index)
+}
 
   useEffect(() => {
     if (disputeError) {
@@ -91,22 +116,13 @@ const GetOneVote = ({ Status, Owner, Ind }) => {
     },
 });
 
-const voteY = async () => {
-    setChoice(1);
-    vote();
-}
-
-const voteN = async () => {
-    setChoice(0);
-    vote();
-}
-
 const vote = async () => {
+  console.log("choice", choice);
     writeContract({ 
         address: contractAddress, 
         abi: contractAbi,
         functionName: 'setVote', 
-        args: [Ind, choice]
+        args: [Ind, Number(choice)]
     })
 };
 
@@ -119,6 +135,7 @@ const { isSuccess: isConfirmed } =
         if(isConfirmed) {
             getEvents();
             refetch();
+            refetchHasVoted();
             refetchAll()
             toast({
                 title: "You voted successfully for  ".concat(choice),
@@ -172,12 +189,30 @@ const { isSuccess: isConfirmed } =
 
         {getAllowedToVote(voterTimeRegistration, creationTime, isVoter) == 2 ? (
            <>
-          {true ? (<>
-          <Tr ><Td textAlign='center' colSpan={2}><Button size="sm" colorScheme='teal' onClick={voteY}> Voter pour valider  </Button></Td>
-          <Td textAlign='center' colSpan={2}><Button size="sm" colorScheme='teal' onClick={voteN}> Voter pour rejeter </Button></Td>
-          <Td textAlign='right' colSpan={1}><Countdown titre={"Temps à avant la fin du vote"} duration={getDuration(creationTime, votingDelay)}/></Td></Tr> </>):(
+           {console.log("hasVoted", hasVoted)}
+          {!hasVoted ? (<>
+            <Tr><Td>
+           
+            {/* <Box marginBottom={5} overflowWrap="break-word" maxW="80%" whiteSpace="pre-wrap" ></Box> */}
+            <RadioGroup colorScheme="teal" value={choice} >
+            <Stack direction="column" spacing={3}>
+            <Radio value={1} onChange={() => handleRadioChange(1)}>
+            Le diplôme est valide 
+            </Radio>
+            <Radio value={0} onChange={() => handleRadioChange(0)}>
+            Le diplôme est faux
+            </Radio>
+            </Stack>
+            </RadioGroup></Td>
+            <Td> <Button isDisabled={getLogic(choice)} colorScheme='teal'  size='md' m={4} onClick={vote}> Voter </Button></Td>
+            <Td textAlign='right' colSpan={1}><Countdown titre={"Temps à avant la fin du vote"} duration={getDuration(creationTime, votingDelay)}/></Td></Tr>
+            </>
+            ):(
 
-            <Td textAlign="center" colSpan={6}>Vous avez voté ! </Td>) }
+       
+            <>
+            <Td textAlign="center" colSpan={6}>Vous avez voté ! </Td>
+            <Td textAlign='right' colSpan={1}><Countdown titre={"Temps à avant la fin du vote"} duration={getDuration(creationTime, votingDelay)}/></Td></>) }
           </> ) : null}</>)}
 
     <Tr ><Td width="18%" style={{ textAlign: 'center' }} >Vote diplôme vrai </Td><Td width="7%" style={{ textAlign: 'center' }} isNumeric>{yes}</Td>
@@ -206,12 +241,13 @@ function getDuration(creationTime, contestDelay)
 function getAllowedToVote(timeRegistration, voteCreationTime, isVoter)
 {
   
+
   if(!isVoter)
     return 0;   //pas voter
   if(timeRegistration > voteCreationTime)
     return 1; //Enregistrement trop tard
   
-  console.log("pourquoi 2")
+ 
   return 2; //Autorisé à voter
 
 }
@@ -219,9 +255,12 @@ function getAllowedToVote(timeRegistration, voteCreationTime, isVoter)
 function getIsVoteOver(voteCreationTime, votingDelay)
 {
   const timestamp = Date.now()/1000;
+ 
+ 
   if(voteCreationTime+ Number(votingDelay) > timestamp)
       return false;
   
+      console.log("vote is over")
   return true;
 
 }
@@ -234,3 +273,11 @@ function getOwner(yes, no,  caseOwner, disputeOwner)
     return disputeOwner
 }
 
+
+function getLogic(choice) 
+{
+  if(choice != undefined)
+    return false
+
+  return true
+}

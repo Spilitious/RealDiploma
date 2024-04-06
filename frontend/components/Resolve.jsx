@@ -69,7 +69,7 @@ const Resolve = ({Owner, Id}) => {
                 <Td><Button colorScheme='teal'  size='md' m={4}  
                         onClick={resolve}> Clôturer le dossier </Button>
                 
-                </Td></Tr></>) :(null)}
+                </Td></Tr></>) :(<Text>Le vote est terminé. Il peut être cloturé par le gagnant </Text>)}
                 </>
                 )
       

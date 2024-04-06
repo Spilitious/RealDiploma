@@ -4,12 +4,51 @@ import { RdaContext } from '@/utils';
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useAccount } from 'wagmi'
 
 
-const GetReward = ({Owner, Id}) => {
+const GetReward = ({Id}) => {
     
         const { contractAddress, contractAbi, getEvents, refetchAll } = useContext(RdaContext);
         const toast = useToast();
         const { address } = useAccount();
-    
+
+        const [hasVoted, setHasVoted] = useState();
+        const [hasClaimed, sethasClaimed] = useState();
+
+        
+        const { data: hasVoted1, error: hasVotedError, isPending: hasVotedIsPending} = useReadContract({
+            address: contractAddress,
+            abi: contractAbi,
+            functionName: 'getHasVotedOnCase',
+            args: [Id, address]
+        });
+
+                
+        useEffect(() => {
+            if (hasVotedError) 
+                console.log(hasVotedError.message);
+      
+            else if (hasVoted1) 
+                setHasVoted(hasVoted1);
+     
+        }, [hasVoted1, hasVotedError]);
+
+        const { data: hasClaimed1, error: hasClaimedError, isPending: hasClaimedIsPending, refetch } = useReadContract({
+            address: contractAddress,
+            abi: contractAbi,
+            functionName: 'getHasClaimedOnCase',
+            args: [Id, address]
+        });
+
+                
+        useEffect(() => {
+            if (hasClaimedError) 
+                console.log(hasClaimedError.message);
+      
+            else if (hasClaimed1) 
+                sethasClaimed(hasClaimed1);
+     
+        }, [hasClaimed1, hasClaimedError]);
+
+
         const { data: hash, writeContract } = useWriteContract({
             mutation: {
                 onError: (error) => {
@@ -43,9 +82,10 @@ const GetReward = ({Owner, Id}) => {
         useEffect(() => {
             if(isConfirmed) {
                 getEvents();
+                refetch();
                 refetchAll()
                 toast({
-                    title: "Récompenses récupéré avec succès",
+                    title: "Récompenses récupérées avec succès",
                     status: "success",
                     duration: 3000,
                     isClosable: true,
@@ -57,23 +97,27 @@ const GetReward = ({Owner, Id}) => {
       
         return (
             <>
-            
+            {console.log("hasClaimed", hasClaimed)}
             {isConfirmed    
             &&  <Alert mt="1rem" status='success'>
                     <AlertIcon />
-                    Diploma validated successfully.
+                    Récompenses récupérées avec succès
                 </Alert>}
-                {Owner == address ? (
+                {console.log("hasVoted dans reward", hasVoted)}
+                {hasVoted ? (
                 <>
-               <Tr><Td> <Text>Le vote est en votre faveur </Text></Td>
-                <Td><Button colorScheme='teal'  size='md' m={4}  
-                        onClick={getReward}> Récupérer ses récompenses </Button>
+                {hasClaimed ? 
+                ( <Text>Récompenses récupérées</Text>) :(
+                <Button colorScheme='teal'  size='md' m={4}  
+                        onClick={getReward}> Récupérer vos récompenses </Button>)}
+                        
+                </> ) : null}
                 
-                </Td></Tr></>) :(null)}
+               
                 </>
                 )
       
       
     }
 
-export default Reward;
+export default GetReward;

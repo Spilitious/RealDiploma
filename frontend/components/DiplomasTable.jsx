@@ -42,10 +42,10 @@ const DiplomasTable = (refreshTable = false) => {
     }, [events]);
 
     return (
-    <TableContainer  height='auto' overflow="yes">
+    <TableContainer   overflowY="auto">
         <Table 
-           // height='100%'
-            width="90%"
+            
+            //width="90%"
            
             // overflowX="auto"
             // bg={tableBgColor}

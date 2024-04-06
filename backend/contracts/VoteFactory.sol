@@ -60,7 +60,7 @@ contract VoteFactory {
         uint totalTokenSquare;
     }
 
-    /// State variables
+   
     Vote[] Votes;
     mapping (address => Voter) mapVoter;
     mapping(uint => mapping(address => Reward)) VoteToReward;
@@ -108,6 +108,7 @@ contract VoteFactory {
         return VoteToReward[_index][_addr].hasVoted;
     }
 
+    
     
     /// @notice Checks if the specified address has claimed the reward for the given vote index.
     /// @dev This function is external and view.

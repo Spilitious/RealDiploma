@@ -22,12 +22,12 @@ import Resolve from './Resolve'
 import { confluxESpaceTestnet, mintSepoliaTestnet } from 'viem/chains';
 import BecomeVoter from './BecomeVoter';
 import GetOneDispute from './GetOneDispute';
-import { resolve } from 'styled-jsx/css';
+import GetReward from "./GetReward";
 
 const GetOneDiploma = ({ Id }) => {
 
   //UseContest
-  const { contractAddress, contractAbi, contestDelay, votingDelay, selectedCase, setSelectedCase, refresh} = useContext(RdaContext);
+  const { contractAddress, contractAbi, contestDelay, votingDelay, selectedCase, setSelectedCase, isVoter, refresh} = useContext(RdaContext);
   
   //useState pour la structrure File
   const [owner, setOwner] = useState("");
@@ -129,11 +129,12 @@ const GetOneDiploma = ({ Id }) => {
         
             {getAction(status, creationTime, contestDelay, votingDelay) == 0 ?  <Td colSpan={6} textAlign="center"><SimpleResolve Owner={owner} Id={Id}/></Td> :  null} 
          
-            {(getAction(status, creationTime, contestDelay, votingDelay) == 2 && owner==address)? <Td colSpan={6} textAlign="center"><Mint Owner={owner} Id={Id} /></Td> : null }
+            {(getAction(status, creationTime, contestDelay, votingDelay) == 2 && owner==address)? <Td colSpan={4} textAlign="center"><Mint Owner={owner} Id={Id} /></Td> : null }
+            {((getAction(status, creationTime, contestDelay, votingDelay) == 2 && isVoter))? <Td colSpan={2} textAlign="center"><GetReward  Id={Id} /></Td> : null }
         
             {getAction(status, creationTime, contestDelay, votingDelay) == 3 ? <Td colSpan={6}><GetOneVote Owner={owner} Ind={Id} /></Td> : null}
 
-            {getAction(status, creationTime, contestDelay, votingDelay) == 4 ?<Td colSpan={6}><GetOneVote Status={status} Owner={owner} Ind={Id} /></Td> : null}
+         
             
            
         </Tr>
@@ -196,6 +197,9 @@ function getDate(timestamp) {
   
     if(status ==1 )
       return 2;
+
+    if(status == 3)
+      return 4;
 
     if(status ==2) {
         return 3;

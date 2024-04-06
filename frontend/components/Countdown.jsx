@@ -4,18 +4,28 @@ import { RdaContext } from '@/utils';
 
 function Countdown({ titre, duration }) {
   const [secondsLeft, setSecondsLeft] = useState(duration);
-  const {refetch} = useContext(RdaContext);
+  const {refetchAll} = useContext(RdaContext);
 
   useEffect(() => {
-    if(secondsLeft < 1)
-      refetch();
-
+    if(secondsLeft <= 1)
+    {
+      console.log("on envoie le refectAll")
+      refetchAll();
+    }
     const intervalId = setInterval(() => {
       setSecondsLeft(prevSeconds => (prevSeconds >= 1 ? prevSeconds - 1 : 0));
     }, 1000);
 
     return () => clearInterval(intervalId);
   }, []);
+
+  useEffect(() => {
+    if(secondsLeft <= 1)
+    {
+      console.log("on envoie le refectAll")
+      refetchAll();
+    }
+  }, [secondsLeft]);
 
   const formatTime = (time) => {
     const hours = Math.floor(time / 3600);

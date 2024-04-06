@@ -155,6 +155,13 @@ contract DiplomaFile is DiplomaFactory, DepositFactory, VoteFactory, Ownable  {
         return Votes[CaseToVote[_index]];
     }
 
+    function getHasVotedOnCase(uint _index, address _addr) external view returns(bool) {
+        return VoteToReward[CaseToVote[_index]][_addr].hasVoted;
+    }
+
+    function getHasClaimedOnCase(uint _index, address _addr) external view returns(bool) {
+        return VoteToReward[CaseToVote[_index]][_addr].hasClaimed;
+    }
 
     /// @notice Calculates the price excluding taxes.
     /// @dev This function is private and pure.

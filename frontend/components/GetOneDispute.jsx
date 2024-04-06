@@ -26,7 +26,7 @@ const GetOneDispute = ({ Ind }) => {
   const hoverBgColor = useColorModeValue("green.100", "teal.800");
   const selectedBgColor = useColorModeValue("green.100", "green.700");
   
-  console.log("type dispute")
+ 
   //Hook de récupération du litige
   const { data: newDispute, error: disputeError, isPending: disputeIsPending } = useReadContract({
     address: contractAddress,

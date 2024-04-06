@@ -8,13 +8,15 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 /// @notice RealDiplomaToken is an ERC20 token serving the RealDiploma protocol.
 contract RealDiplomaToken is ERC20, Ownable {
     
+    //error ErrorTotalSupplyReached(string msgError);
+
     /// @notice Maximum supply of the token
-    uint public maxSupply;
+    //uint public maxSupply;
     
 
     /// @notice Constructor function for RealDiplomaToken.
     constructor() ERC20 ("RealDiploma", "RDA") Ownable(msg.sender) {
-        maxSupply = 10**7;
+       // maxSupply = 10**7;
         _mint(msg.sender, 1000 *(10**18));
 
     }
