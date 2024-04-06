@@ -5,7 +5,6 @@ import { RdaContext } from '@/utils';
 import Browser from './Browser';
 import BecomeVoter from './BecomeVoter';
 import CreateCase from './CreateCase';
-import DiplomaList from './DiplomaList';
 
 import DiplomasTable from './DiplomasTable';
 import Events from './Events';
@@ -37,12 +36,12 @@ const RealDiploma = () => {
 
 
     return (
-        <Flex  marginTop='150px' direction="column" width="100%" height="100vh" overflowY="auto" p={10}  >
+        <Flex  marginTop='0px' direction="column" width="100%" height="80vh" overflowY="auto"   >
             <Box bgGradient="linear(to-r, teal.300, blue.500)">
                 <Browser />
             </Box>
 
-            <Flex  flex="1" marginTop='120px'  direction="column" alignItems='center' overflowY="auto">
+            <Flex  flex="1" marginTop='80px'  direction="column" alignItems='center' overflowY="auto">
                 {content1}
             </Flex>
         </Flex>

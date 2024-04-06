@@ -9,6 +9,7 @@ const Header = () => {
   return (
     <Flex
       position="sticky"
+      width="98%"
       top="0"
       zIndex="docked" // Assure que le header reste au-dessus du contenu lors du scroll
       justifyContent="space-between"
@@ -33,10 +34,10 @@ const Header = () => {
       {/* Contenu de l'en-tête : Logo et Toggle à gauche, ConnectButton à droite */}
       <Box display="flex" alignItems="center">
       <Image
-          src="./public/Icone2.png" // chemin local de votre image
-        alt="Description de l'image"
-        w={50} // largeur de l'image
-        h={50} // hauteur de l'image
+          src="/public/Icone2.png" // chemin local de votre image
+        alt="Dip"
+        // w={50} // largeur de l'image
+        // h={50} // hauteur de l'image
     />
         {/* Ajout de marge à gauche du Toggle pour éviter le chevauchement */}
         {/* <Toggle ml="2rem" /> ml (margin left) ajoute de l'espace à gauche */}

@@ -115,7 +115,7 @@ const GetOneDiploma = ({ Id }) => {
      
        
        
-        <Table >
+        <Table  marginBottom={10} align='center' marginTop={3} width="94%"  >
         <Tr><GetOneDip width="100%" key={Id} Ind={Id} /></Tr>
         <Tr>
         <Td  colSpan={4} textAlign="center" borderColor="teal.500" borderWidth="2px">{owner}</Td>

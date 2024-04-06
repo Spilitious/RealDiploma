@@ -31,18 +31,20 @@ const DiplomasTable = (refreshTable = false) => {
         setDiplomas(diplomaAddedEvents.map((event) => ( 
         <Box  key={event.index}
               //   onClick={() => handleRowClick(event.index)}
-              marginBottom={10}
+                marginBottom={10}
+                bg="gray.200"
+                borderColor="teal.500" 
+                borderWidth="2px"
              
-             
-              borderColor="blue.500" borderWidth="2px">
-             <Text textAlign="center" fontSize="xl" color="teal.500" fontWeight="bold" borderColor="teal.500" borderWidth="2px"> Diplôme n° {Number(event.index)+1} </Text>
-             <GetOneDiploma key={event.index} Id={event.index} />
+               >
+             <Text marginTop={3} textAlign="center" fontSize="xl"  fontWeight="bold"> Diplôme n° {Number(event.index)+1} </Text>
+             <GetOneDiploma marginBottom={10} key={event.index} Id={event.index} />
         </Box>)))
          
     }, [events]);
 
     return (
-    <TableContainer   overflowY="auto">
+    <TableContainer  width="70%" overflowY="auto">
         <Table 
             
             //width="90%"

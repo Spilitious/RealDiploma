@@ -94,20 +94,26 @@ const BecomeVoter = () => {
             {isConfirmed    
             &&  <Alert mt="1rem" status='success'>
                     <AlertIcon />
-                    Félicitations ! You avez bloqué {tokenAmount} tokens and vous ête maintenant un juré ! 
+                    Félicitations ! You avez bloqué {tokenAmount} tokens et vous ête maintenant un juré ! 
                 </Alert>}
             
             {isVoter ? (
-            <Box marginBotton={30}>Vous êtes un juré avec {Number(voterTokenAmount)/10**18} tokens bloqués  </Box>)
+            <Box   bg="gray.200"
+            // bgGradient="linear(to-b, gray.100, white)"
+            borderColor="teal.500" borderWidth="2px" marginBotton={30}>Vous êtes un juré avec {Number(voterTokenAmount)/10**18} tokens bloqués  </Box>)
             : (
             <Flex key={isVoter}
                 justifyContent="space-between"
                 alignItems="center"
                 direction="column"
-                width="100%"
+                width="80%"
                 mt="1rem"
+                bg="gray.200"
+                borderColor="teal.500" 
+                borderWidth="2px"
+               
             >
-                <Box marginBotton={30}>Pour devenir électeur, vous devez bloquer un minimum de 10 tokens. Vous pourrez alors voter pour tous les litiges créés après votre inscription</Box>
+                <Box marginTop={10} marginBotton={30}>Pour devenir électeur, vous devez bloquer un minimum de 10 tokens. Vous pourrez alors voter pour tous les litiges créés après votre inscription</Box>
                 <Box marginTop={10} display="flex" alignItems="center">
                 <Text marginRight="2" flex="2" >Entrez le nombre de token que vous souhaitez engager</Text>
                 <Input flex="1" borderColor="teal.500" borderWidth="2px" placeholder='10' value={tokenAmount} onChange={(e) => setTokenAmount(e.target.value)} />

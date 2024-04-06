@@ -17,8 +17,10 @@ const Events = () => {
   const { events } = useContext(RdaContext);
 
   return (
-    <>
-      <Heading  as="h2" size="xl">
+    <Box  bg="gray.200"
+    borderColor="teal.500" 
+    borderWidth="2px">
+      <Heading marginTop={6} as="h2" size="xl" textAlign="center">
         Events log
       </Heading>
       <Box>
@@ -27,12 +29,12 @@ const Events = () => {
           align="start" 
           mb={5} 
           overflowY="auto"
-          marginTop={"40px"}
-          maxH={"600px"}
+          marginTop={"30px"}
+          maxH={"520px"}
         >
         {events.length > 0 ? (
           events.map((event, index) => (
-            <Box key={index} zIndex={5}>
+            <Box marginLeft={10} marginRight={10} key={index} zIndex={5}>
               <Heading>
                 {event.name}
               </Heading>
@@ -56,7 +58,7 @@ const Events = () => {
 
       </Box>
 
-    </>
+    </Box>
   );
 };
 
@@ -162,7 +164,7 @@ function getStatusText(status) {
       return 'rejected';
     
     default:
-      return 'Unknown Event';
+      return 'validated';
   }
 }
 
