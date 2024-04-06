@@ -1,4 +1,4 @@
-export const RdaNftAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
+export const RdaNftAddress = "0xDb26eBaCbAF9DDADf94D3614ef1fe3a7Bd49A102";
 export const RdaNftAbi = [      {
             "inputs": [
               {

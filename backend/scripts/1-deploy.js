@@ -3,6 +3,7 @@ const hre = require("hardhat");
 
 async function main() {
  
+  const daoAddress = "0xb2495f0f4A8a02e36b1C45860003be3A6C7A01AB"
   //Deploiemnent de RealDiplomaToken 
   const rda = await hre.ethers.deployContract("RealDiplomaToken");
   await rda.waitForDeployment();
@@ -11,12 +12,12 @@ async function main() {
   console.log(`Owner address: ${rdaOwner.address}`);
 
   //Deploiement de DiplomaFile 
-  [,,,,,,,,, dao] = await hre.ethers.getSigners();
+  // [,,,,,,,,, dao] = await hre.ethers.getSigners();
   const DiplomaFile = await hre.ethers.getContractFactory("DiplomaFile");
-  const diplomaFile = await DiplomaFile.deploy(rda.target, dao);
+  const diplomaFile = await DiplomaFile.deploy(rda.target, daoAddress);
   await diplomaFile.waitForDeployment();
   console.log(`DiplomaFile contract has been deployed at ${diplomaFile.target}`);
-  console.log(`Dao address : ${dao.address}`);
+  //console.log(`Dao address : ${dao.address}`);
 
    //Deploiement de DiplomaNft
    const DiplomaNft = await hre.ethers.getContractFactory("DiplomaNft");
@@ -24,9 +25,10 @@ async function main() {
    await diplomaNft.waitForDeployment();
    console.log(`DiplomaNft contract has been deployed at ${diplomaNft.target}`);
   
-   [user0, user1, user2, nonUser1, nonUser2, nonUser3, voter1, voter2, voter3, daoAddress] = await ethers.getSigners();
+  //  [user0, user1, user2, nonUser1, nonUser2, nonUser3, voter1, voter2, voter3, daoAddress] = await ethers.getSigners();
   //Distribution de token et allowance
   
+  /*
   await rda.mint(user1, 1000);
   await rda.mint(user2, 1000);
   await rda.mint(nonUser1, 1000);
@@ -35,7 +37,7 @@ async function main() {
   await rda.mint(voter3, 300);
 
   await diplomaFile.setDisputeDelay(500);
-  await diplomaFile.setVotingDelay(500);
+  await diplomaFile.setVotingDelay(500); */
 
 }
 

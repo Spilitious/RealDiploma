@@ -1,8 +1,8 @@
 export const logo = "https://media.discordapp.net/attachments/1215573414840897556/1219021237981024336/Design_sans_titre.png?ex=6609c8ff&is=65f753ff&hm=0f36b1f1fe393335f684784dd5e6814b332bcaf21c6bd785c435d7db605c2dcc&=&format=webp&quality=lossless&width=705&height=705"
 export const bg ='https://media.discordapp.net/attachments/1215308279606022174/1219249220582641664/anorak21_background_image_vor_votingdApp_teal_variation_colors__0d095143-b712-4647-9083-3ac4f167e83d.png?ex=660a9d52&is=65f82852&hm=a3cb589995b6f7f2fcc6d16a365182b29ae0e683d9b1081f7c01416b66eafc45&=&format=webp&quality=lossless&width=936&height=936'
 
-export const RdaAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-export const contractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+export const RdaAddress = "0x7F3012E3Ba0d7A1A7A325F5f21f712ec411FE662";
+export const contractAddress = "0xc9E25be1592A5aAE4d2b5DB60e5E376b27452bB6";
 export const RdaAbi = [      {
   "inputs": [],
   "stateMutability": "nonpayable",

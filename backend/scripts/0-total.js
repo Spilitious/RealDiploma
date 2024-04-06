@@ -68,10 +68,10 @@ async function main() {
   const user2Balance = await rda.balanceOf(user2);
   const nonUser1Balance = await rda.balanceOf(nonUser1);
   const nonUser2Balance = await rda.balanceOf(nonUser2);
-  const voter1Balance = await rda.balanceOf(voter1);
-  const voter2Balance = await rda.balanceOf(voter2);
-  const voter3Balance = await rda.balanceOf(voter3);
-  const daoBalance = await rda.balanceOf(daoAddress);
+  let voter1Balance = await rda.balanceOf(voter1);
+  let voter2Balance = await rda.balanceOf(voter2);
+  let voter3Balance = await rda.balanceOf(voter3);
+  let daoBalance = await rda.balanceOf(daoAddress);
 
   const user0Allowance = await rda.allowance(user0, diplomaFile.target);
   const user1Allowance = await rda.allowance(user1, diplomaFile.target);
@@ -135,6 +135,8 @@ async function main() {
   
  let contractBalance = await rda.balanceOf(diplomaFile.target);
  console.log("Contract Balance : ", contractBalance);
+ daoBalance =  await rda.balanceOf(daoAddress);
+ console.log("DAO Balance : ", daoBalance);
 
  console.log('\x1b[36m%s\x1b[0m',"/* *************************************************************************** Création de dossier ************************************************************* */")
  /* *************************************************************************************** ********************************************************************************* */
@@ -155,27 +157,28 @@ async function main() {
     let [lastName, firstName, birthday, school, title, dimplomaDate] = await diplomaFile.getDiploma(0);
     let [depostierAddress, creationTime, status] = await diplomaFile.getCase(0);
    
-    console.log("---------------------------- DOSSIER 1 --------------------------------------")
+    console.log("---------------------------- DOSSIER 0 --------------------------------------")
     console.log(lastName, firstName, getDate(birthday), school, title, getDate(dimplomaDate));
     console.log(depostierAddress, creationTime, status);
    
 
     [lastName, firstName, birthday, school, title, dimplomaDate] = await diplomaFile.getDiploma(1);
     [depostierAddress, creationTime, status] = await diplomaFile.getCase(1);
-    console.log("---------------------------- DOSSIER 2 --------------------------------------")
+    console.log("---------------------------- DOSSIER 1 --------------------------------------")
     console.log(lastName, firstName, getDate(birthday), school, title, getDate(dimplomaDate));
     console.log(depostierAddress, creationTime, status);
 
 
     [lastName, firstName, birthday, school, title, dimplomaDate] = await diplomaFile.getDiploma(2);
     [depostierAddress, creationTime, status] = await diplomaFile.getCase(2);
-    console.log("---------------------------- DOSSIER 3 --------------------------------------")
+    console.log("---------------------------- DOSSIER 2 --------------------------------------")
     console.log(lastName, firstName, getDate(birthday), school, title, getDate(dimplomaDate));
     console.log(depostierAddress, creationTime, status);
 
     contractBalance = await rda.balanceOf(diplomaFile.target);
     console.log("Contract Balance : ", contractBalance);
-
+    daoBalance =  await rda.balanceOf(daoAddress);
+    console.log("DAO Balance : ", daoBalance);
    
    /*
     let userBalanceBefore = await rda.balanceOf(user0);
@@ -210,7 +213,7 @@ async function main() {
     console.log("Contract Balance : ", contractBalance);
 
     console.log("-")
-    console.log('\x1b[36m%s\x1b[0m',"/* *************************************************************************** contestation du dossier 1 *********************************** */")
+    console.log('\x1b[36m%s\x1b[0m',"/* *************************************************************************** contestation du dossier 1 par user2 *********************************** */")
     /* *************************************************************************************** ********************************************************************************* */
  
     // Contestation du dossier 1 
@@ -224,14 +227,16 @@ async function main() {
 
     /* ************************************************* Sortie console ************************************************** */
 
-    console.log("---------------------------- Contestation DOSSIER 1 --------------------------------------")
-    console.log("Balance User0 Avant", userBalanceBefore);
-    console.log("Balance User0 Avant", userBalanceAfter);
+    //console.log("---------------------------- Contestation DOSSIER 1 --------------------------------------")
+    console.log("Balance User2 Avant", userBalanceBefore);
+    console.log("Balance User2 Après", userBalanceAfter);
     console.log("Status Avant", statusBefore);
     console.log("Status Apres", statusAfter);
 
     contractBalance = await rda.balanceOf(diplomaFile.target);
     console.log("Contract Balance : ", contractBalance);
+    daoBalance =  await rda.balanceOf(daoAddress);
+    console.log("DAO Balance : ", daoBalance);
 
     console.log("-")
     console.log('\x1b[36m%s\x1b[0m', '/* *************************************************************************** Vote *********************************** */'); 
@@ -239,7 +244,7 @@ async function main() {
      /* *************************************************************************************** ********************************************************************************* */
     
     
-    /* ********************************************************** Execution *********************************************************** */ 
+    
     
     await diplomaFile.setVotingDelay(400);
 
@@ -334,10 +339,13 @@ async function main() {
     console.log("OwnerAfter du NFT 1 : ", ownerAfter)
  
     
-    let [, lastNameNft, firstNameNft, birthdayNft] = await diplomaNft.getRdaNft(0);
+    let [, lastNameNft, firstNameNft, birthdayNft, schoolNft, titleNft, dateNft] = await diplomaNft.getRdaNft(0);
     console.log("lastName : ", lastNameNft);
     console.log("firsName : ", firstNameNft);
     console.log("birthday : ", birthdayNft);
+    console.log("lastName : ", schoolNft);
+    console.log("firsName : ", titleNft);
+    console.log("birthday : ", dateNft);
 }
 
 main().catch((error) => {
