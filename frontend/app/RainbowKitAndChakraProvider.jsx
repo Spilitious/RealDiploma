@@ -11,7 +11,7 @@ import {  QueryClientProvider,  QueryClient } from "@tanstack/react-query";
 const config = getDefaultConfig({
     appName: 'My RainbowKit App',
     projectId: '60e5e2dc8e5849ea101975d59b6c98f3',
-    chains: [hardhat],
+    chains: [sepolia],
     ssr: true, // If your dApp uses server side rendering (SSR)
 });
 
