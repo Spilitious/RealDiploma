@@ -1,4 +1,4 @@
-ProjetFinal Alyra : RealDiploma
+Projet final Alyra : RealDiploma
 
 Description 
 Real Diploma est une plateforme innovante visant à offrir une authentification fiable et sécurisée des diplômes et des formations grâce à l'utilisation de la 
