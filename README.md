@@ -1,6 +1,7 @@
 Projet final Alyra : RealDiploma
 
 Description 
+
 Real Diploma est une plateforme innovante visant à offrir une authentification fiable et sécurisée des diplômes et des formations grâce à l'utilisation de la 
 technologie blockchain. En permettant à chaque utilisateur de soumettre ses certifications à une validation par une justice décentralisée, Real Diploma garantit
 une vérification transparente et impartiale. L'utilisation de la blockchain garantit l'immuabilité et l'inaltérabilité des données, offrant ainsi une protection
