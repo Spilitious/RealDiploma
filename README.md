@@ -9,13 +9,16 @@ disposer d'une attestation portable de ses diplômes
 
 Adresse des contrats Sépolia 
 RealDiplomaToken : 0x77aaAD3Aea730f733f06160a2e703e5ED3624ae7
+
 ![Verif-RealDiplomaToken](https://github.com/Spilitious/RealDiploma/assets/148981418/acb9299a-75fd-4dec-8730-67d25045677f)
 
 DiplomaFile : 0x8c6f27F64FC25FE22558a195B37d11E9a4FB2Edf
+
 ![Verif-DiplomaFile](https://github.com/Spilitious/RealDiploma/assets/148981418/f8ae0a4f-21b6-4fd4-b39b-890ad5447bf4)
 
 
 DiplomaNft : 0x77aaAD3Aea730f733f06160a2e703e5ED3624ae7
+
 ![Verif-RealDiplomaToken](https://github.com/Spilitious/RealDiploma/assets/148981418/bd167d70-e4f1-41e5-b8c8-2635a994f2be)
 
 Déploiement Vercel 
@@ -25,13 +28,15 @@ Vidéo de démonstration première partie
 - Dépôt d'un diplôme 
 - Enregistrement du juré 
 - Validation du diplôme non constesté 
-- Mint du NFT associé au diplôme validé 
+- Mint du NFT associé au diplôme validé
+  
 https://www.loom.com/share/eb61a079300c41238c95fdacacd19490?sid=6827bbb5-2f83-4ba1-9fca-c1b3095d74cd
 
 Vidéo de démonstration deuxième partie
 - Contestation d'un diplôme
 - Vote sur le diplôme contesté
-- Récupération des rewards pour les jurés ayant votés 
+- Récupération des rewards pour les jurés ayant votés
+  
 https://www.loom.com/share/3acb373863c5409da7f6eef4b505eaa5?sid=63c0a10e-23ff-4dcb-9dbc-02a882bebd95
 
 Natspec 
