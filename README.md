@@ -27,7 +27,7 @@ https://real-diploma-frdk.vercel.app/
 
 Vidéo de démonstration première partie 
 - Dépôt d'un diplôme 
-- Enregistrement du juré 
+- Enregistrement de jurés 
 - Validation du diplôme non constesté 
 - Mint du NFT associé au diplôme validé
   
@@ -36,7 +36,7 @@ https://www.loom.com/share/eb61a079300c41238c95fdacacd19490?sid=6827bbb5-2f83-4b
 Vidéo de démonstration deuxième partie
 - Contestation d'un diplôme
 - Vote sur le diplôme contesté
-- Récupération des rewards pour les jurés ayant votés
+- Récupération des recompenses pour les jurés ayant votés
   
 https://www.loom.com/share/3acb373863c5409da7f6eef4b505eaa5?sid=63c0a10e-23ff-4dcb-9dbc-02a882bebd95
 
@@ -69,9 +69,9 @@ avec tous les éléments dedans. Avec cette nouvelle architecture, il est possib
 Améliorations à venir 
 - Reprise du backend (01/05/2024)
 - Création d'un dépôt de fichier sur IPFS pour la preuve de la contestation puis hashage du fichier enregistré dans le contrat (01/06/2024)
-- Amélioration du système de vote avec principalement une fonction de validation d'un vote à partir d'un corum défini en fonction du nombre 
-de token engagé dans le vote et la totalSupply de celui-ci (01/07/2024)
-- Un swap RDA-ETH pour lequels les liquidity providers recevront des pouvoirs de vote (01/08/2024)
+- Amélioration du système de vote avec principalement une fonction de validation d'un vote à partir d'un corum défini en relation avec le nombre 
+de tokens engagés dans le vote et la totalSupply de celui-ci (01/07/2024)
+- Un swap RDA-ETH pour lequel les liquidity providers recevront des pouvoirs de vote (01/08/2024)
 
 Stay tuned ! ;)
 
